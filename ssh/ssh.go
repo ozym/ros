@@ -99,7 +99,7 @@ func (s SSH) List(base string, properties []string) ([]map[string]string, error)
 	if err != nil {
 		return nil, err
 	}
-	list, err := scanNumberedItemList(strings.Join(lines, "\n"))
+	list, err := ros.ScanNumberedItemList(strings.Join(lines, "\n"))
 	if err != nil {
 		return nil, err
 	}
@@ -206,7 +206,7 @@ func sshRunResults(client *ssh.Client, command string) (map[string]string, error
 		return nil, err
 	}
 
-	res, err := scanItems(strings.Join(lines, "\n"))
+	res, err := ros.ScanItems(strings.Join(lines, "\n"))
 	if err != nil {
 		return nil, err
 	}

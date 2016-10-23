@@ -1,4 +1,4 @@
-package ssh
+package ros
 
 import (
 	"strings"
@@ -49,7 +49,7 @@ func (s *Scanner) Next() bool {
 }
 
 // <ws><key>:[<value>...]<nl>
-func scanItems(results string) (map[string]string, error) {
+func ScanItems(results string) (map[string]string, error) {
 	items := make(map[string]string)
 
 	s := NewScanner(results)

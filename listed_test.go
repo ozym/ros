@@ -1,4 +1,4 @@
-package ssh
+package ros
 
 import (
 	"encoding/json"

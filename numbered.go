@@ -1,4 +1,4 @@
-package ssh
+package ros
 
 import (
 	"strconv"
@@ -123,7 +123,7 @@ func scanNumberedItem(s *scanner.Scanner, f map[string]string) (map[string]strin
 	return res, nil
 }
 
-func scanNumberedItemList(results string) ([]map[string]string, error) {
+func ScanNumberedItemList(results string) ([]map[string]string, error) {
 	var list []map[string]string
 
 	var s scanner.Scanner
@@ -170,8 +170,8 @@ func scanNumberedItemList(results string) ([]map[string]string, error) {
 	return list, nil
 }
 
-func scanFirstNumberedItemList(results string) (map[string]string, error) {
-	list, err := scanNumberedItemList(results)
+func ScanFirstNumberedItemList(results string) (map[string]string, error) {
+	list, err := ScanNumberedItemList(results)
 	if err != nil {
 		return nil, err
 	}
