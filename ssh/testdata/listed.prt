@@ -1,0 +1,6 @@
+       routerboard: yes
+             model: 2011LS
+     serial-number: 39A50206C6B8
+     firmware-type: ar9344
+  current-firmware: 3.24
+  upgrade-firmware: 3.24

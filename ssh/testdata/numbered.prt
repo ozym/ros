@@ -1,0 +1,48 @@
+Flags: D - dynamic, X - disabled, R - running, S - slave
+ 0  R  ;;; lk2avalon
+       name="ether1" default-name="ether1" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 mac-address=D4:CA:6D:4E:EE:7D fast-path=yes
+       last-link-down-time=mar/25/2016 12:08:22 last-link-up-time=mar/25/2016 13:16:52 link-downs=2
+
+ 1  R  ;;; rf2cotton
+       name="ether2" default-name="ether2" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 mac-address=D4:CA:6D:4E:EE:7E fast-path=yes
+       last-link-up-time=nov/07/2015 14:27:19 link-downs=0
+
+ 2  R  ;;; rfap5g
+       name="ether3" default-name="ether3" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 mac-address=D4:CA:6D:4E:EE:7F fast-path=yes
+       last-link-up-time=nov/07/2015 14:27:19 link-downs=0
+
+ 3  R  ;;; rf2horokiwi
+       name="ether4" default-name="ether4" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 mac-address=D4:CA:6D:4E:EE:80 fast-path=yes
+       last-link-down-time=sep/28/2016 10:54:57 last-link-up-time=sep/28/2016 10:55:00 link-downs=2
+
+ 4     name="ether5" default-name="ether5" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 mac-address=D4:CA:6D:4E:EE:81 fast-path=yes
+       link-downs=0
+
+ 5  R  ;;; rfap2g5g
+       name="ether6" default-name="ether6" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=2028 mac-address=D4:CA:6D:4E:EE:82 fast-path=yes
+       last-link-down-time=sep/23/2016 11:18:15 last-link-up-time=sep/23/2016 11:30:51 link-downs=6
+
+ 6  R  ;;; rf2petoneoverbridge
+       name="ether7" default-name="ether7" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=2028 mac-address=D4:CA:6D:4E:EE:83 fast-path=yes
+       last-link-up-time=nov/07/2015 14:27:20 link-downs=0
+
+ 7  R  ;;; rfap9g
+       name="ether8" default-name="ether8" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=2028 mac-address=D4:CA:6D:4E:EE:84 fast-path=yes
+       last-link-down-time=sep/23/2016 11:18:09 last-link-up-time=sep/23/2016 11:18:11 link-downs=3 example="With a Space"
+
+ 8   S name="ether9" default-name="ether9" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=2028 mac-address=D4:CA:6D:4E:EE:85 fast-path=yes
+       link-downs=0
+
+ 9 X S ;;; local
+       name="ether10" default-name="ether10" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=2028 mac-address=D4:CA:6D:4E:EE:86 fast-path=yes
+       link-downs=0
+
+10     name="sfp1" default-name="sfp1" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 mac-address=D4:CA:6D:4E:EE:7C fast-path=yes
+       link-downs=0
+
+11  R  name="switch" type="bridge" mtu=1500 actual-mtu=1500 l2mtu=1598 mac-address=D4:CA:6D:4E:EE:85 fast-path=yes last-link-up-time=nov/07/2015 14:27:15
+       link-downs=0
+
+12 XRS ;;; Avalon to Rafter
+       name="tun-gns-av-rafter" type="gre-tunnel" mtu=auto actual-mtu=1476 l2mtu=65535 fast-path=yes last-link-down-time=jun/16/2016 10:11:05
+       last-link-up-time=jun/16/2016 10:09:28 link-downs=2
