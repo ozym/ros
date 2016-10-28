@@ -72,8 +72,14 @@ func (a API) Print(base string, filter map[string]string, properties []string, d
 	return apiRunResult(a.client, command)
 }
 
-func (a API) List(base string, properties []string) ([]map[string]string, error) {
+func (a API) List(base string, filter map[string]string, properties []string, detail bool) ([]map[string]string, error) {
 	command := []string{base + "/print"}
+	if detail {
+		command = append(command, "=detail=")
+	}
+	for k, v := range filter {
+		command = append(command, "?="+k+"="+v)
+	}
 	if len(properties) > 0 {
 		command = append(command, "=.proplist="+strings.Join([]string(properties), ","))
 	}

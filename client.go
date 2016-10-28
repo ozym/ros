@@ -4,6 +4,17 @@ import (
 	"strconv"
 )
 
+func firstList(l Lister, command string, filter map[string]string, properties []string, detail bool) (map[string]string, error) {
+	res, err := l.List(command, filter, properties, detail)
+	if err != nil {
+		return nil, err
+	}
+	if len(res) > 0 {
+		return res[0], nil
+	}
+	return nil, nil
+}
+
 func SystemResource(p Printer) (map[string]string, error) {
 	return p.Print("/system/resource", nil,
 		[]string{
@@ -109,8 +120,8 @@ func SetSystemNTPClientSecondaryNTP(s Setter, ntp string) error {
 	return SetSystemNTPClient(s, "secondary-ntp", ntp)
 }
 
-func SystemLoggingAction(p Printer, name string) (map[string]string, error) {
-	return p.Print("/system/logging/action",
+func SystemLoggingAction(l Lister, name string) (map[string]string, error) {
+	return firstList(l, "/system/logging/action",
 		map[string]string{
 			"name": name,
 		},
@@ -190,8 +201,8 @@ func SetSNMPContact(s Setter, contact string) error {
 	return SetSNMP(s, "contact", contact)
 }
 
-func InterfaceGRE(p Printer, name string) (map[string]string, error) {
-	return p.Print("/interface/gre",
+func InterfaceGRE(l Lister, name string) (map[string]string, error) {
+	return firstList(l, "/interface/gre",
 		map[string]string{
 			"name": name,
 		},
@@ -234,8 +245,8 @@ func SetInterfaceGREKeepalive(s Setter, name, alive string) error {
 	return SetInterfaceGRE(s, name, "keepalive", alive)
 }
 
-func RoutingBGPPeer(p Printer, instance, address string) (map[string]string, error) {
-	return p.Print("/routing/bgp/peer",
+func RoutingBGPPeer(l Lister, instance, address string) (map[string]string, error) {
+	return firstList(l, "/routing/bgp/peer",
 		map[string]string{
 			"interface":      instance,
 			"remote-address": address,
@@ -287,8 +298,8 @@ func SetIPDNSAllowRemoteRequests(s BoolSetter, allow bool) error {
 	return SetIPDNS(s, "allow-remote-requests", s.FormatBool(allow))
 }
 
-func IPAddress(p Printer, address string) (map[string]string, error) {
-	return p.Print("/ip/address",
+func IPAddress(l Lister, address string) (map[string]string, error) {
+	return firstList(l, "/ip/address",
 		map[string]string{
 			"address": address,
 		},
@@ -301,7 +312,7 @@ func IPAddress(p Printer, address string) (map[string]string, error) {
 func SetIPAddress(s Setter, address, key, value string) error {
 	return s.Set("/ip/address",
 		map[string]string{
-			address: "address",
+			"address": address,
 		},
 		map[string]string{
 			key: value,
@@ -311,8 +322,8 @@ func SetIPAddressComment(s Setter, address, comment string) error {
 	return SetIPAddress(s, address, "comment", comment)
 }
 
-func User(p Printer, name string) (map[string]string, error) {
-	return p.Print("/user",
+func User(l Lister, name string) (map[string]string, error) {
+	return firstList(l, "/user",
 		map[string]string{
 			"name": name,
 		},
@@ -397,8 +408,8 @@ func SetToolRomonSecrets(s Setter, secrets string, legacy bool) error {
 	return SetToolRomon(s, "secrets", secrets, legacy)
 }
 
-func ToolRomonPort(p Printer, iface string, legacy bool) (map[string]string, error) {
-	return p.Print(toolRomon(legacy)+"/port",
+func ToolRomonPort(l Lister, iface string, legacy bool) (map[string]string, error) {
+	return firstList(l, toolRomon(legacy)+"/port",
 		map[string]string{
 			"interface": iface,
 		},
@@ -456,8 +467,8 @@ func RemoveToolRomonPort(r Remover, iface string, legacy bool) error {
 	return nil
 }
 
-func IPService(p Printer, name string) (map[string]string, error) {
-	return p.Print("/ip/service",
+func IPService(l Lister, name string) (map[string]string, error) {
+	return firstList(l, "/ip/service",
 		map[string]string{
 			"name": name,
 		},
@@ -491,9 +502,13 @@ func SetIPServiceAddress(s Setter, name string, address string) error {
 }
 
 func InterfaceList(l Lister) ([]map[string]string, error) {
-	return l.List("/interface", nil)
+	return l.List("/interface", nil, nil, true)
 }
 
 func AddressList(l Lister) ([]map[string]string, error) {
-	return l.List("/ip/address", nil)
+	return l.List("/ip/address", nil, nil, true)
+}
+
+func InterfaceBridgePortList(l Lister) ([]map[string]string, error) {
+	return l.List("/interface/bridge/port", nil, nil, true)
 }

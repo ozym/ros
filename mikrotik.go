@@ -11,7 +11,7 @@ type Printer interface {
 	Print(base string, filter map[string]string, properties []string, detail bool) (map[string]string, error)
 }
 type Lister interface {
-	List(base string, properties []string) ([]map[string]string, error)
+	List(base string, filter map[string]string, properties []string, detail bool) ([]map[string]string, error)
 }
 type Setter interface {
 	Set(base string, filter map[string]string, settings map[string]string) error
@@ -315,4 +315,9 @@ func (m MikroTik) InterfaceList() ([]map[string]string, error) {
 // List Router Addresses
 func (m MikroTik) AddressList() ([]map[string]string, error) {
 	return AddressList(m)
+}
+
+// List Router Interface Bridge Ports
+func (m MikroTik) InterfaceBridgePortList() ([]map[string]string, error) {
+	return InterfaceBridgePortList(m)
 }

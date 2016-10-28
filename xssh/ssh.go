@@ -94,9 +94,18 @@ func (s SSH) Print(base string, filter map[string]string, properties []string, d
 	return res, nil
 }
 
-func (s SSH) List(base string, properties []string) ([]map[string]string, error) {
+func (s SSH) List(base string, filter map[string]string, properties []string, detail bool) ([]map[string]string, error) {
 
 	b := "/" + strings.Join(strings.Split(strings.TrimPrefix(base, "/"), "/"), " ") + " print"
+	if detail {
+		b = b + " detail"
+	}
+	if filter != nil {
+		b = b + " where"
+		for k, v := range filter {
+			b = b + " " + k + "=" + strconv.Quote(v)
+		}
+	}
 
 	lines, err := sshRunLines(s.client, b)
 	if err != nil {

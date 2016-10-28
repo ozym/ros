@@ -1,6 +1,8 @@
 package ssh
 
 import (
+	//	"fmt"
+
 	"bufio"
 	"net"
 	"strconv"
@@ -77,6 +79,7 @@ func (s SSH) Print(base string, filter map[string]string, properties []string, d
 	if err != nil {
 		return nil, err
 	}
+
 	if !(len(properties) > 0) {
 		return r, nil
 	}
@@ -91,9 +94,18 @@ func (s SSH) Print(base string, filter map[string]string, properties []string, d
 	return res, nil
 }
 
-func (s SSH) List(base string, properties []string) ([]map[string]string, error) {
+func (s SSH) List(base string, filter map[string]string, properties []string, detail bool) ([]map[string]string, error) {
 
 	b := "/" + strings.Join(strings.Split(strings.TrimPrefix(base, "/"), "/"), " ") + " print"
+	if detail {
+		b = b + " detail"
+	}
+	if filter != nil {
+		b = b + " where"
+		for k, v := range filter {
+			b = b + " " + k + "=" + strconv.Quote(v)
+		}
+	}
 
 	lines, err := sshRunLines(s.client, b)
 	if err != nil {
@@ -104,19 +116,21 @@ func (s SSH) List(base string, properties []string) ([]map[string]string, error)
 		return nil, err
 	}
 
-	if len(properties) > 0 {
-		var res []map[string]string
-		for _, l := range list {
-			r := make(map[string]string)
-			for _, k := range properties {
-				if v, ok := l[k]; ok {
-					r[k] = v
+	/*
+		if len(properties) > 0 {
+			var res []map[string]string
+			for _, l := range list {
+				r := make(map[string]string)
+				for _, k := range properties {
+					if v, ok := l[k]; ok {
+						r[k] = v
+					}
 				}
+				res = append(res, r)
 			}
-			res = append(res, r)
+			list = res
 		}
-		list = res
-	}
+	*/
 
 	return list, nil
 }
