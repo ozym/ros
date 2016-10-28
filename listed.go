@@ -72,7 +72,9 @@ func ScanItems(results string) (map[string]string, error) {
 			}
 			value = value + s.String()
 		}
-		items[strings.TrimSpace(key)] = strings.TrimSpace(value)
+		if len(strings.TrimSpace(key)) > 0 {
+			items[strings.TrimSpace(key)] = strings.TrimSpace(value)
+		}
 	}
 
 	return items, nil

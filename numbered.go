@@ -7,6 +7,8 @@ import (
 	"unicode"
 )
 
+// Scan the Flags line providing a list of key value pairs.
+// e.g "Flags: X - disabled, I - invalid, D - dynamic"
 func scanFlags(s *scanner.Scanner) map[string]string {
 	ws := s.Whitespace
 	mo := s.Mode
@@ -40,6 +42,7 @@ func scanFlags(s *scanner.Scanner) map[string]string {
 	return flags
 }
 
+// Skip any internal comment lines that begin with '#'
 func skipComment(s *scanner.Scanner) {
 	ws := s.Whitespace
 	defer func() {
@@ -56,6 +59,7 @@ func skipComment(s *scanner.Scanner) {
 	}
 }
 
+// Skip any actual comment lines that begin with ';;;'
 func scanComment(s *scanner.Scanner) string {
 	ws := s.Whitespace
 	defer func() {
@@ -76,6 +80,7 @@ func scanComment(s *scanner.Scanner) string {
 	return comment
 }
 
+// Scan a numbered item which may include comments, optional state flags and key values.
 func scanNumberedItem(s *scanner.Scanner, f map[string]string) (map[string]string, error) {
 
 	var key string
@@ -123,6 +128,7 @@ func scanNumberedItem(s *scanner.Scanner, f map[string]string) (map[string]strin
 	return res, nil
 }
 
+// Scan a set of numbered items, this may be preceded with a Flags line.
 func ScanNumberedItemList(results string) ([]map[string]string, error) {
 	var list []map[string]string
 
@@ -132,7 +138,7 @@ func ScanNumberedItemList(results string) ([]map[string]string, error) {
 	s.Mode = scanner.ScanIdents | scanner.ScanStrings
 	s.Whitespace = 1<<'\t' | 1<<'\r' | 1<<' '
 	s.IsIdentRune = func(ch rune, i int) bool {
-		return ch == ':' || ch == ';' || ch == '/' || ch == '-' || ch == ',' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
+		return ch == ':' || ch == '.' || ch == ';' || ch == '/' || ch == '-' || ch == ',' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
 	}
 
 	var flags map[string]string
@@ -170,6 +176,7 @@ func ScanNumberedItemList(results string) ([]map[string]string, error) {
 	return list, nil
 }
 
+// Take the first entry, usually after applying a filter.
 func ScanFirstNumberedItemList(results string) (map[string]string, error) {
 	list, err := ScanNumberedItemList(results)
 	if err != nil {
