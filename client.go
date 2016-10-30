@@ -142,7 +142,7 @@ func SystemLoggingAction(l Lister, name string) (map[string]string, error) {
 func SetSystemLoggingAction(s Setter, name, key, value string) error {
 	return s.Set("/system/logging/action",
 		map[string]string{
-			name: "name",
+			"name": name,
 		},
 		map[string]string{
 			key: value,
@@ -172,6 +172,52 @@ func SetSystemLoggingActionSyslogSeverity(s Setter, name, severity string) error
 }
 func SetSystemLoggingActionSyslogTimeFormat(s Setter, name, format string) error {
 	return SetSystemLoggingAction(s, name, "syslog-time-format", format)
+}
+
+func SystemLogging(l Lister, action, topics string) (map[string]string, error) {
+	return firstList(l, "/system/logging",
+		map[string]string{
+			"action": action,
+			"topics": topics,
+		},
+		[]string{
+			"prefix",
+		},
+		true,
+	)
+}
+
+func AddSystemLogging(a Adder, action, topics string) error {
+	return a.Add("/system/logging",
+		map[string]string{
+			"action": action,
+			"topics": topics,
+		},
+	)
+}
+
+func RemoveSystemLogging(r Remover, action, topics string) error {
+	return r.Remove("/system/logging",
+		map[string]string{
+			"action": action,
+			"topics": topics,
+		},
+	)
+}
+
+func SetSystemLogging(s Setter, action, topics, key, value string) error {
+	return s.Set("/system/logging",
+		map[string]string{
+			"action": action,
+			"topics": topics,
+		},
+		map[string]string{
+			key: value,
+		})
+}
+
+func SetSystemLoggingPrefix(s Setter, action, topics, prefix string) error {
+	return SetSystemLogging(s, action, topics, "prefix", prefix)
 }
 
 func SNMP(p Printer) (map[string]string, error) {
@@ -373,7 +419,7 @@ func RemoveUser(r Remover, name string) error {
 	return nil
 }
 
-func toolRomon(legacy bool) string {
+func toolRomonLabel(legacy bool) string {
 	if legacy {
 		return "/romon"
 	}
@@ -381,7 +427,7 @@ func toolRomon(legacy bool) string {
 }
 
 func ToolRomon(p Printer, legacy bool) (map[string]string, error) {
-	return p.Print(toolRomon(legacy), nil,
+	return p.Print(toolRomonLabel(legacy), nil,
 		[]string{
 			"id",
 			"enabled",
@@ -392,7 +438,7 @@ func ToolRomon(p Printer, legacy bool) (map[string]string, error) {
 }
 
 func SetToolRomon(s Setter, key, value string, legacy bool) error {
-	return s.Set(toolRomon(legacy), nil,
+	return s.Set(toolRomonLabel(legacy), nil,
 		map[string]string{
 			key: value,
 		})
@@ -409,7 +455,7 @@ func SetToolRomonSecrets(s Setter, secrets string, legacy bool) error {
 }
 
 func ToolRomonPort(l Lister, iface string, legacy bool) (map[string]string, error) {
-	return firstList(l, toolRomon(legacy)+"/port",
+	return firstList(l, toolRomonLabel(legacy)+"/port",
 		map[string]string{
 			"interface": iface,
 		},
@@ -424,7 +470,7 @@ func ToolRomonPort(l Lister, iface string, legacy bool) (map[string]string, erro
 }
 
 func SetToolRomonPort(s Setter, iface, key, value string, legacy bool) error {
-	return s.Set(toolRomon(legacy)+"/port",
+	return s.Set(toolRomonLabel(legacy)+"/port",
 		map[string]string{
 			"interface": iface,
 		},

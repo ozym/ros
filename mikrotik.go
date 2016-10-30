@@ -104,6 +104,19 @@ func (m MikroTik) SetSystemNTPClientSecondaryNTP(name string) error {
 }
 
 // Manage Router Logging Settings
+func (m MikroTik) SystemLogging(action, topics string) (map[string]string, error) {
+	return SystemLogging(m, action, topics)
+}
+func (m MikroTik) AddSystemLogging(action, topics string) error {
+	return AddSystemLogging(m, action, topics)
+}
+func (m MikroTik) RemoveSystemLogging(action, topics string) error {
+	return RemoveSystemLogging(m, action, topics)
+}
+func (m MikroTik) SetSystemLoggingPrefix(action, topics, prefix string) error {
+	return SetSystemLoggingPrefix(m, action, topics, prefix)
+}
+
 func (m MikroTik) SystemLoggingAction(name string) (map[string]string, error) {
 	return SystemLoggingAction(m, name)
 }

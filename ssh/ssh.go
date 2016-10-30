@@ -147,6 +147,7 @@ func (s SSH) Set(base string, filter map[string]string, settings map[string]stri
 	for k, v := range settings {
 		b = b + " " + k + "=" + strconv.Quote(v)
 	}
+	//return fmt.Errorf(b)
 	err := sshRun(s.client, b)
 	if err != nil {
 		return err
