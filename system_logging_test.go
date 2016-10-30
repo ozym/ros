@@ -11,7 +11,7 @@ func TestSystemLogging(t *testing.T) {
 		v string
 	}{
 		{systemLogging("action", "topics"), `/system logging print detail where action="action" topics="topics"`},
-		{addSystemLogging("action", "topics"), `:if (:len [/system logging find action="action" topics="topics"] = 0) do={/system logging add action="action" topics="topics"}`},
+		{addSystemLogging("action", "topics"), `:if ([:len [/system logging find action="action" topics="topics"]] = 0) do={/system logging add action="action" topics="topics"}`},
 		{removeSystemLogging("action", "topics"), `/system logging remove [find action="action" topics="topics"]`},
 		{setSystemLoggingPrefix("action", "topics", "prefix"), `/system logging set [find action="action" topics="topics"] prefix="prefix"`},
 	}

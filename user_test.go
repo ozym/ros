@@ -11,7 +11,7 @@ func TestSystemUser(t *testing.T) {
 		v string
 	}{
 		{user("name"), `/user print detail where name="name"`},
-		{addUser("name", "group", "password"), `:if (:len [/user find group="group" name="name"] = 0) do={/user add group="group" name="name" password="password"}`},
+		{addUser("name", "group", "password"), `:if ([:len [/user find group="group" name="name"]] = 0) do={/user add group="group" name="name" password="password"}`},
 		{removeUser("name"), `/user remove [find name="name"]`},
 		{setUser("name", "key", "value"), `/user set [find name="name"] key="value"`},
 	}

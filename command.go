@@ -27,7 +27,7 @@ var setTmpl = template.Must(template.New("set").Parse(
 var removeTmpl = template.Must(template.New("remove").Parse(
 	`{{.Path}} remove{{if .Filter}} [find{{range $k,$v := .Filter}} {{$k}}="{{$v}}"{{end}}]{{end}}{{if .UParam}} {{.UParam}}{{end}}`))
 var addTmpl = template.Must(template.New("add").Parse(
-	`{{if .Params}}:if (:len [{{.Path}} find{{range $k,$v := .Params}} {{$k}}="{{$v}}"{{end}}] = 0) do={{"{"}}{{end}}{{.Path}} add{{range $k,$v := .Params}} {{$k}}="{{$v}}"{{end}}{{range $k,$v := .Extra}} {{$k}}="{{$v}}"{{end}}{{if .Params}}{{"}"}}{{end}}`))
+	`{{if .Params}}:if ([:len [{{.Path}} find{{range $k,$v := .Params}} {{$k}}="{{$v}}"{{end}}]] = 0) do={{"{"}}{{end}}{{.Path}} add{{range $k,$v := .Params}} {{$k}}="{{$v}}"{{end}}{{range $k,$v := .Extra}} {{$k}}="{{$v}}"{{end}}{{if .Params}}{{"}"}}{{end}}`))
 var printTmpl = template.Must(template.New("print").Parse(
 	`{{.Path}} print{{if .Detail}} detail{{end}}{{if or .Filter .Flags}} where{{range $k,$v := .Filter}} {{$k}}="{{$v}}"{{end}}{{range $k,$v := .Flags}} {{if not $v}}!{{end}}{{$k}}{{end}}{{end}}`))
 

@@ -19,7 +19,7 @@ func TestCommand_Add(t *testing.T) {
 					"group": "read",
 				},
 			},
-			`:if (:len [/user find group="read" name="name"] = 0) do={/user add group="read" name="name"}`,
+			`:if ([:len [/user find group="read" name="name"]] = 0) do={/user add group="read" name="name"}`,
 		},
 	}
 
