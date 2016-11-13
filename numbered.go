@@ -83,11 +83,12 @@ func scanComment(s *scanner.Scanner) string {
 // Scan a numbered item which may include comments, optional state flags and key values.
 func scanNumberedItem(s *scanner.Scanner, f map[string]string) (map[string]string, error) {
 
+	var bracket int
 	var key string
 
 	res := make(map[string]string)
 
-	var tok rune
+	var tok, prev rune
 	for tok != scanner.EOF {
 		tok = s.Scan()
 		if tok == '\n' && s.Peek() == '\n' {
@@ -100,7 +101,7 @@ func scanNumberedItem(s *scanner.Scanner, f map[string]string) (map[string]strin
 		case ";;;":
 			res["comment"] = scanComment(s)
 		default:
-			if s.Peek() == '=' {
+			if s.Peek() == '=' && bracket == 0 {
 				key = s.TokenText()
 			} else if key == "" {
 				for _, v := range s.TokenText() {
@@ -108,18 +109,39 @@ func scanNumberedItem(s *scanner.Scanner, f map[string]string) (map[string]strin
 						res[f[string(v)]] = "yes"
 					}
 				}
-			} else if s.TokenText() != "\n" && s.TokenText() != "=" {
-				u, err := strconv.Unquote(s.TokenText())
-				if err != nil {
-					u = s.TokenText()
+			} else if s.TokenText() != "\n" {
+				if s.TokenText() == "{" {
+					bracket++
 				}
-				if _, ok := res[key]; ok {
-					res[key] = res[key] + " " + u
-				} else {
-					res[key] = u
+				if s.TokenText() != "=" || bracket > 0 {
+					u, err := strconv.Unquote(s.TokenText())
+					if err != nil || bracket > 0 {
+						u = s.TokenText()
+					}
+					if _, ok := res[key]; ok {
+						if (bracket > 0) && (prev == '{' || u == "}" || u == "=") {
+							res[key] = res[key] + u
+						} else if (bracket > 0) && (prev == '=') {
+							res[key] = res[key] + u
+						} else if (bracket > 0) && (u == "}" && prev == ' ') {
+							res[key] = res[key] + u
+						} else if prev == ',' {
+							res[key] = res[key] + u
+						} else {
+							res[key] = res[key] + " " + u
+						}
+					} else {
+						res[key] = u
+					}
+					if _, ok := res["comment"]; !ok {
+						res["comment"] = ""
+					}
+					if len(res[key]) > 0 {
+						prev = rune(res[key][len(res[key])-1])
+					}
 				}
-				if _, ok := res["comment"]; !ok {
-					res["comment"] = ""
+				if s.TokenText() == "}" {
+					bracket--
 				}
 			}
 		}
@@ -138,7 +160,7 @@ func ScanNumberedItemList(results string) ([]map[string]string, error) {
 	s.Mode = scanner.ScanIdents | scanner.ScanStrings
 	s.Whitespace = 1<<'\t' | 1<<'\r' | 1<<' '
 	s.IsIdentRune = func(ch rune, i int) bool {
-		return ch == ':' || ch == '.' || ch == ';' || ch == '/' || ch == '-' || ch == ',' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
+		return ch == ':' || ch == '.' || ch == ';' || ch == '/' || ch == '-' || ch == ',' || ch == '_' || ch == '[' || ch == ']' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
 	}
 
 	var flags map[string]string

@@ -117,8 +117,12 @@ func (c Command) List(client *ssh.Client) ([]map[string]string, error) {
 	if err != nil || !(len(lines) > 0) {
 		return nil, err
 	}
+	var trimmed []string
+	for _, l := range lines {
+		trimmed = append(trimmed, strings.TrimSpace(l))
+	}
 
-	list, err := ScanNumberedItemList(strings.Join(lines, "\n"))
+	list, err := ScanNumberedItemList(strings.Join(trimmed, "\n"))
 	if err != nil {
 		return nil, err
 	}

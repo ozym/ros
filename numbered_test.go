@@ -30,6 +30,68 @@ func TestNumbered(t *testing.T) {
 				},
 			},
 		},
+		{
+			`Flags: X - disabled
+			 0   ;;; Monitor Link Between Cotton and Climie
+			      host=10.242.0.17 timeout=998ms interval=10s since=nov/13/2016 11:37:06 status=up up-script=lk2cotton-climie_up down-script=lk2cotton-climie_down
+			`,
+			[]map[string]string{
+				map[string]string{
+					"number":      "0",
+					"comment":     "Monitor Link Between Cotton and Climie",
+					"host":        "10.242.0.17",
+					"timeout":     "998ms",
+					"interval":    "10s",
+					"status":      "up",
+					"up-script":   "lk2cotton-climie_up",
+					"down-script": "lk2cotton-climie_down",
+					"since":       "nov/13/2016 11:37:06",
+					"disabled":    "no",
+				},
+			},
+		},
+		{
+			`Flags: I - invalid
+			 0   name="lk2cotton-climie_up" owner="admin+cte" policy=ftp,reboot,read,write,policy,test,winbox,password,sniff,sensitive,api last-started=nov/13/2016 12:14:19
+			      run-count=6 source={/ip address set [find address="10.54.242.1/28" ] disabled=no}
+			`,
+			[]map[string]string{
+				map[string]string{
+					"number":       "0",
+					"name":         "lk2cotton-climie_up",
+					"owner":        "admin+cte",
+					"policy":       "ftp,reboot,read,write,policy,test,winbox,password,sniff,sensitive,api",
+					"last-started": "nov/13/2016 12:14:19",
+					"run-count":    "6",
+					"source":       "{/ip address set [find address=\"10.54.242.1/28\" ] disabled=no}",
+					"comment":      "",
+					"invalid":      "no",
+				},
+			},
+		},
+		{
+			`Flags: I - invalid
+ 0   name="lk2cotton-climie_up" owner="admin+cte"
+     policy=ftp,reboot,read,write,policy,test,winbox,password,sniff,sensitive,
+       api
+     last-started=nov/13/2016 12:14:19 run-count=6
+     source={/ip address set [find address="10.54.242.1/28" ] disabled=no}
+
+`,
+			[]map[string]string{
+				map[string]string{
+					"number":       "0",
+					"name":         "lk2cotton-climie_up",
+					"owner":        "admin+cte",
+					"policy":       "ftp,reboot,read,write,policy,test,winbox,password,sniff,sensitive,api",
+					"last-started": "nov/13/2016 12:14:19",
+					"run-count":    "6",
+					"source":       "{/ip address set [find address=\"10.54.242.1/28\" ] disabled=no}",
+					"comment":      "",
+					"invalid":      "no",
+				},
+			},
+		},
 	}
 
 	for _, test := range tests {
