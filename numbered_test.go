@@ -78,6 +78,7 @@ func TestNumbered(t *testing.T) {
      source={/ip address set [find address="10.54.242.1/28" ] disabled=no}
 
 `,
+
 			[]map[string]string{
 				map[string]string{
 					"number":       "0",
@@ -89,6 +90,94 @@ func TestNumbered(t *testing.T) {
 					"source":       "{/ip address set [find address=\"10.54.242.1/28\" ] disabled=no}",
 					"comment":      "",
 					"invalid":      "no",
+				},
+			},
+		},
+		{
+			`Flags: D - dynamic, X - disabled, R - running, S - slave
+0   S name="ether1" default-name="ether1" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=2028 mac-address=4C:5E:0C:18:C1:4D fast-path=yes
+	last-link-down-time=nov/18/2016 02:30:07 last-link-up-time=nov/18/2016 02:23:19 link-downs=10
+
+1  RS name="ether2" default-name="ether2" type="ether" mtu=1500 actual-mtu=1500 l2mtu=1598 max-l2mtu=2028 mac-address=4C:5E:0C:18:C1:4E fast-path=yes
+	last-link-down-time=nov/18/2016 04:03:47 last-link-up-time=nov/18/2016 04:03:49 link-downs=3
+			
+55  R  name="switch" type="bridge" mtu=auto actual-mtu=1500 l2mtu=1598 mac-address=4C:5E:0C:18:C1:4D fast-path=yes last-link-up-time=nov/18/2016 01:53:02 link-downs=0
+
+`,
+			[]map[string]string{
+				map[string]string{
+					"comment":             "",
+					"number":              "0",
+					"dynamic":             "no",
+					"disabled":            "no",
+					"slave":               "yes",
+					"running":             "no",
+					"name":                "ether1",
+					"default-name":        "ether1",
+					"type":                "ether",
+					"mtu":                 "1500",
+					"actual-mtu":          "1500",
+					"l2mtu":               "1598",
+					"max-l2mtu":           "2028",
+					"mac-address":         "4C:5E:0C:18:C1:4D",
+					"fast-path":           "yes",
+					"last-link-down-time": "nov/18/2016 02:30:07",
+					"last-link-up-time":   "nov/18/2016 02:23:19",
+					"link-downs":          "10",
+				},
+				map[string]string{
+					"comment":             "",
+					"number":              "1",
+					"dynamic":             "no",
+					"disabled":            "no",
+					"slave":               "yes",
+					"running":             "yes",
+					"name":                "ether2",
+					"default-name":        "ether2",
+					"type":                "ether",
+					"mtu":                 "1500",
+					"actual-mtu":          "1500",
+					"l2mtu":               "1598",
+					"max-l2mtu":           "2028",
+					"mac-address":         "4C:5E:0C:18:C1:4E",
+					"fast-path":           "yes",
+					"last-link-down-time": "nov/18/2016 04:03:47",
+					"last-link-up-time":   "nov/18/2016 04:03:49",
+					"link-downs":          "3",
+				},
+				map[string]string{
+					"comment":           "",
+					"number":            "55",
+					"dynamic":           "no",
+					"disabled":          "no",
+					"slave":             "no",
+					"running":           "yes",
+					"name":              "switch",
+					"type":              "bridge",
+					"mtu":               "auto",
+					"actual-mtu":        "1500",
+					"l2mtu":             "1598",
+					"mac-address":       "4C:5E:0C:18:C1:4D",
+					"fast-path":         "yes",
+					"last-link-up-time": "nov/18/2016 01:53:02",
+					"link-downs":        "0",
+				},
+			},
+		},
+		{`Flags: X - disabled, I - invalid, D - dynamic
+		 0   address=192.168.80.114/28 network=192.168.80.112 interface=switch actual-interface=switch
+		 `,
+			[]map[string]string{
+				map[string]string{
+					"comment":          "",
+					"invalid":          "no",
+					"dynamic":          "no",
+					"disabled":         "no",
+					"number":           "0",
+					"address":          "192.168.80.114/28",
+					"network":          "192.168.80.112",
+					"interface":        "switch",
+					"actual-interface": "switch",
 				},
 			},
 		},

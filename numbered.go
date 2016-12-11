@@ -1,6 +1,7 @@
 package ros
 
 import (
+	"bufio"
 	"strconv"
 	"strings"
 	"text/scanner"
@@ -9,15 +10,10 @@ import (
 
 // Scan the Flags line providing a list of key value pairs.
 // e.g "Flags: X - disabled, I - invalid, D - dynamic"
-func scanFlags(s *scanner.Scanner) map[string]string {
-	ws := s.Whitespace
-	mo := s.Mode
-	id := s.IsIdentRune
-	defer func() {
-		s.Whitespace = ws
-		s.Mode = mo
-		s.IsIdentRune = id
-	}()
+func scanFlags(line string) map[string]string {
+	var s scanner.Scanner
+	s.Init(strings.NewReader(line))
+
 	s.Whitespace = 1<<'\t' | 1<<'-' | 1<<'\r' | 1<<' ' | 1<<','
 	s.IsIdentRune = func(ch rune, i int) bool {
 		return unicode.IsLetter(ch) || unicode.IsDigit(ch)
@@ -42,24 +38,7 @@ func scanFlags(s *scanner.Scanner) map[string]string {
 	return flags
 }
 
-// Skip any internal comment lines that begin with '#'
-func skipComment(s *scanner.Scanner) {
-	ws := s.Whitespace
-	defer func() {
-		s.Whitespace = ws
-	}()
-	s.Whitespace = 1 << '\r'
-
-	var tok rune
-	for tok != scanner.EOF {
-		tok = s.Scan()
-		if tok == '\n' {
-			break
-		}
-	}
-}
-
-// Skip any actual comment lines that begin with ';;;'
+// Scan any actual comment lines that begin with ';;;'
 func scanComment(s *scanner.Scanner) string {
 	ws := s.Whitespace
 	defer func() {
@@ -80,118 +59,266 @@ func scanComment(s *scanner.Scanner) string {
 	return comment
 }
 
-// Scan a numbered item which may include comments, optional state flags and key values.
-func scanNumberedItem(s *scanner.Scanner, f map[string]string) (map[string]string, error) {
+func scanLine(s *scanner.Scanner) string {
+	ws := s.Whitespace
+	defer func() {
+		s.Whitespace = ws
+	}()
+	s.Whitespace = 1 << '\r'
 
-	var bracket int
-	var key string
+	line := s.TokenText()
 
-	res := make(map[string]string)
-
-	var tok, prev rune
+	var tok rune
 	for tok != scanner.EOF {
-		tok = s.Scan()
-		if tok == '\n' && s.Peek() == '\n' {
+		if s.Peek() == '\n' {
 			break
 		}
+		if tok = s.Scan(); tok == scanner.EOF {
+			continue
+		}
+		line = line + s.TokenText()
+	}
+	return line
+}
 
-		switch s.TokenText() {
-		case "#":
-			skipComment(s)
-		case ";;;":
-			res["comment"] = scanComment(s)
-		default:
-			if s.Peek() == '=' && bracket == 0 {
-				key = s.TokenText()
-			} else if key == "" {
-				for _, v := range s.TokenText() {
-					if _, ok := f[string(v)]; ok {
-						res[f[string(v)]] = "yes"
-					}
+// assumes the current position has been processed
+func scanOpts(s *scanner.Scanner) (string, string, string) {
+
+	ws := s.Whitespace
+	mo := s.Mode
+	id := s.IsIdentRune
+
+	defer func() {
+		s.Whitespace = ws
+		s.Mode = mo
+		s.IsIdentRune = id
+	}()
+
+	// only expect letters (at least for now)
+	s.Whitespace = 1<<'\t' | 1<<'\r' | 1<<' ' | 1<<','
+	s.IsIdentRune = func(ch rune, i int) bool {
+		return ch == '-' || ch == ';' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
+	}
+	s.Mode = scanner.ScanIdents
+
+	var opts, comment, line string
+
+	var tok rune
+	for tok != scanner.EOF && tok != '\n' {
+		if tok = s.Scan(); tok == scanner.EOF || tok == '\n' {
+			continue
+		}
+		if tok == scanner.Ident {
+			if s.TokenText() == ";;;" {
+				// skip the current commas
+				if tok = s.Scan(); tok == scanner.EOF {
+					continue
 				}
-			} else if s.TokenText() != "\n" {
-				if s.TokenText() == "{" {
-					bracket++
-				}
-				if s.TokenText() != "=" || bracket > 0 {
-					u, err := strconv.Unquote(s.TokenText())
-					if err != nil || bracket > 0 {
-						u = s.TokenText()
-					}
-					if _, ok := res[key]; ok {
-						if (bracket > 0) && (prev == '{' || u == "}" || u == "=") {
-							res[key] = res[key] + u
-						} else if (bracket > 0) && (prev == '=') {
-							res[key] = res[key] + u
-						} else if (bracket > 0) && (u == "}" && prev == ' ') {
-							res[key] = res[key] + u
-						} else if prev == ',' {
-							res[key] = res[key] + u
-						} else {
-							res[key] = res[key] + " " + u
-						}
-					} else {
-						res[key] = u
-					}
-					if _, ok := res["comment"]; !ok {
-						res["comment"] = ""
-					}
-					if len(res[key]) > 0 {
-						prev = rune(res[key][len(res[key])-1])
-					}
-				}
-				if s.TokenText() == "}" {
-					bracket--
-				}
+				// recover the comment text
+				comment = scanLine(s)
+			} else if s.Peek() != '=' {
+				opts += s.TokenText()
+			} else {
+				line += s.TokenText()
+			}
+		} else {
+			line += scanLine(s)
+		}
+	}
+
+	return opts, comment, line
+}
+
+// scan a script, i.e. "{/ip address set [find address="10.54.242.1/28" ] disabled=no}"
+func scanRaw(s *scanner.Scanner) string {
+	var res string
+
+	mode := s.Mode
+	ws := s.Whitespace
+	defer func() {
+		s.Mode = mode
+		s.Whitespace = ws
+	}()
+
+	s.Mode = 0
+	s.Whitespace = 0
+
+	// have one already
+	bracket := 1
+
+	var tok rune
+	for tok != scanner.EOF {
+		if tok = s.Scan(); tok == scanner.EOF {
+			continue
+		}
+		if tok == '{' {
+			bracket++
+		} else if tok == '}' {
+			bracket--
+		}
+		res += string(tok)
+
+		if bracket == 0 {
+			break
+		}
+	}
+
+	return res
+}
+
+func isIdent(ch rune) bool {
+	for _, i := range ":.;/-,_[]" {
+		if ch == i {
+			return true
+		}
+	}
+	return false
+}
+
+func scanKeyValues(line string) map[string]string {
+	var key string
+	res := make(map[string]string)
+
+	var s scanner.Scanner
+	s.Init(strings.NewReader(line))
+
+	s.Mode = scanner.ScanIdents | scanner.ScanStrings
+	s.Whitespace = 1<<'\t' | 1<<'\r' | 1<<'\n' | 1<<' '
+	s.IsIdentRune = func(ch rune, i int) bool {
+		return isIdent(ch) || unicode.IsLetter(ch) || unicode.IsDigit(ch)
+	}
+
+	var tok rune
+	for tok != scanner.EOF {
+		if tok = s.Scan(); tok == scanner.EOF {
+			continue
+		}
+
+		if s.Peek() == '=' {
+			key = s.TokenText()
+		} else if s.TokenText() == "{" {
+			res[key] += s.TokenText() + scanRaw(&s)
+		} else if s.TokenText() != "=" {
+			u, err := strconv.Unquote(s.TokenText())
+			if err != nil {
+				u = s.TokenText()
+			}
+			if _, ok := res[key]; ok {
+				res[key] = res[key] + " " + u
+			} else {
+				res[key] = u
 			}
 		}
 	}
 
-	return res, nil
+	return res
 }
 
 // Scan a set of numbered items, this may be preceded with a Flags line.
 func ScanNumberedItemList(results string) ([]map[string]string, error) {
-	var list []map[string]string
+	var flags map[string]string
 
-	var s scanner.Scanner
-	s.Init(strings.NewReader(results))
+	reader := bufio.NewReader(strings.NewReader(results))
 
-	s.Mode = scanner.ScanIdents | scanner.ScanStrings
-	s.Whitespace = 1<<'\t' | 1<<'\r' | 1<<' '
-	s.IsIdentRune = func(ch rune, i int) bool {
-		return ch == ':' || ch == '.' || ch == ';' || ch == '/' || ch == '-' || ch == ',' || ch == '_' || ch == '[' || ch == ']' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
+	var lines []string
+	for {
+		line, _, err := reader.ReadLine()
+		if err != nil {
+			break
+		}
+		lines = append(lines, string(line))
 	}
 
-	var flags map[string]string
+	// precondition the input lines ...
+	for i := 1; i < len(lines); i++ {
+		switch {
+		case strings.HasPrefix(strings.TrimLeftFunc(lines[i-1], unicode.IsSpace), "#"):
+			// remove any general comments
+			lines = append(lines[:i-1], lines[i:]...)
+		case strings.HasPrefix(strings.TrimLeftFunc(lines[i-1], unicode.IsSpace), "Flags:"):
+			// recover the flags line
+			flags = scanFlags(strings.Replace(lines[i-1], "Flags:", "", -1))
+			// cut out the previous line
+			lines = append(lines[:i-1], lines[i:]...)
+		case strings.HasSuffix(strings.TrimRightFunc(lines[i-1], unicode.IsSpace), ","):
+			// update the previous line
+			lines[i-1] = strings.TrimRightFunc(lines[i-1], unicode.IsSpace) + strings.TrimSpace(lines[i])
+			// cut out the current line
+			if i < len(lines)-1 {
+				lines = append(lines[:i], lines[i+1:]...)
+			} else {
+				lines = lines[:i]
+			}
+		}
+	}
+
+	var s scanner.Scanner
+	s.Init(strings.NewReader(strings.Join(lines, "\n")))
+
+	s.Mode = scanner.ScanInts | scanner.ScanIdents
+	s.Whitespace = 1<<'\t' | 1<<'\r' | 1<<'\n' | 1<<' '
+	s.IsIdentRune = func(ch rune, i int) bool {
+		return ch == ':' || ch == ';' || ch == '-' || unicode.IsLetter(ch)
+	}
+
+	var list []map[string]string
+
+	var number, opts, comment, line string
 
 	var tok rune
 	for tok != scanner.EOF {
-		if tok = s.Scan(); tok == '\n' || tok == scanner.EOF {
+		if tok = s.Scan(); tok == scanner.EOF {
 			continue
 		}
-		if s.TokenText() != "Flags:" {
-			no := s.TokenText()
-
-			item, err := scanNumberedItem(&s, flags)
-			if err != nil {
-				return nil, err
+		if tok == scanner.Int {
+			if number != "" && line != "" {
+				ans := map[string]string{
+					"number":  number,
+					"comment": comment,
+				}
+				lookup := make(map[string]bool)
+				for _, o := range opts {
+					lookup[string(o)] = true
+				}
+				for k, v := range flags {
+					if _, ok := lookup[k]; ok {
+						ans[v] = "yes"
+					} else {
+						ans[v] = "no"
+					}
+				}
+				for k, v := range scanKeyValues(line) {
+					ans[k] = v
+				}
+				list = append(list, ans)
 			}
-
-			ans := make(map[string]string)
-			ans["number"] = no
-			for k, v := range item {
-				ans[k] = strings.TrimSpace(v)
+			number = s.TokenText()
+			opts, comment, line = scanOpts(&s)
+		} else {
+			line += " " + scanLine(&s)
+		}
+	}
+	if line != "" {
+		if number != "" && line != "" {
+			ans := map[string]string{
+				"number":  number,
+				"comment": comment,
 			}
-			for _, v := range flags {
-				if _, ok := ans[v]; !ok {
+			lookup := make(map[string]bool)
+			for _, o := range opts {
+				lookup[string(o)] = true
+			}
+			for k, v := range flags {
+				if _, ok := lookup[k]; ok {
+					ans[v] = "yes"
+				} else {
 					ans[v] = "no"
 				}
 			}
-
+			for k, v := range scanKeyValues(line) {
+				ans[k] = v
+			}
 			list = append(list, ans)
-		} else {
-			flags = scanFlags(&s)
 		}
 	}
 

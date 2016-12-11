@@ -1,10 +1,14 @@
 package ros
 
 import (
+	"sync"
+
 	"github.com/ScriptRock/crypto/ssh"
 )
 
 type Ros struct {
+	sync.Mutex
+
 	Client   *ssh.Client
 	Hostname string
 }

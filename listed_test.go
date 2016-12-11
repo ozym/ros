@@ -65,6 +65,95 @@ func TestListed(t *testing.T) {
 				"upgrade-firmware": "3.24",
 			},
 		},
+		{
+			s: `                   uptime: 52w2d4m10s
+                  version: "4.5"
+              free-memory: 46032kB
+             total-memory: 62432kB
+                      cpu: "MIPS 24K V7.4"
+                cpu-count: 1
+            cpu-frequency: 680MHz
+                 cpu-load: 1
+           free-hdd-space: 90776kB
+          total-hdd-space: 126976kB
+  write-sect-since-reboot: 90739
+         write-sect-total: 90739
+               bad-blocks: 2
+        architecture-name: "mipsbe"
+               board-name: "RB411UAHR"
+`,
+			m: map[string]string{
+				"uptime":                  "52w2d4m10s",
+				"version":                 "4.5",
+				"free-memory":             "46032kB",
+				"total-memory":            "62432kB",
+				"cpu":                     "MIPS 24K V7.4",
+				"cpu-count":               "1",
+				"cpu-frequency":           "680MHz",
+				"cpu-load":                "1",
+				"free-hdd-space":          "90776kB",
+				"total-hdd-space":         "126976kB",
+				"write-sect-since-reboot": "90739",
+				"write-sect-total":        "90739",
+				"bad-blocks":              "2",
+				"architecture-name":       "mipsbe",
+				"board-name":              "RB411UAHR",
+			},
+		},
+		{
+			s: `            time: 20:45:55
+            date: dec/04/2016
+  time-zone-name: Pacific/Auckland
+      gmt-offset: +13:00
+      dst-active: yes
+`,
+			m: map[string]string{
+				"time":           "20:45:55",
+				"date":           "dec/04/2016",
+				"time-zone-name": "Pacific/Auckland",
+				"gmt-offset":     "+13:00",
+				"dst-active":     "yes",
+			},
+		},
+		{
+			s: `                   uptime: 2w6d6h54m56s
+                  version: 6.34.1 (stable)
+               build-time: Feb/02/2016 14:08:42
+              free-memory: 41.5MiB
+             total-memory: 64.0MiB
+                      cpu: MIPS 24Kc V7.4
+                cpu-count: 1
+            cpu-frequency: 650MHz
+                 cpu-load: 0%
+           free-hdd-space: 4.9MiB
+          total-hdd-space: 16.0MiB
+  write-sect-since-reboot: 147004
+         write-sect-total: 147578
+               bad-blocks: 0%
+        architecture-name: mipsbe
+               board-name: hEX PoE lite
+                 platform: MikroTik
+`,
+			m: map[string]string{
+				"uptime":                  "2w6d6h54m56s",
+				"version":                 "6.34.1 (stable)",
+				"build-time":              "Feb/02/2016 14:08:42",
+				"free-memory":             "41.5MiB",
+				"total-memory":            "64.0MiB",
+				"cpu":                     "MIPS 24Kc V7.4",
+				"cpu-count":               "1",
+				"cpu-frequency":           "650MHz",
+				"cpu-load":                "0%",
+				"free-hdd-space":          "4.9MiB",
+				"total-hdd-space":         "16.0MiB",
+				"write-sect-since-reboot": "147004",
+				"write-sect-total":        "147578",
+				"bad-blocks":              "0%",
+				"architecture-name":       "mipsbe",
+				"board-name":              "hEX PoE lite",
+				"platform":                "MikroTik",
+			},
+		},
 	}
 
 	for _, x := range tests {

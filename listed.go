@@ -54,7 +54,7 @@ func ScanItems(results string) (map[string]string, error) {
 
 	s := NewScanner(results)
 	s.Mode = scanner.ScanIdents
-	s.Whitespace = 1<<'\t' | 1<<'\r'
+	s.Whitespace = 1<<'\t' | 1<<'\r' | 1<<'"'
 	s.IsIdentRune = func(ch rune, i int) bool {
 		return ch == '.' || ch == '-' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
 	}
