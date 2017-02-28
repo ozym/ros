@@ -16,7 +16,7 @@ func scanFlags(line string) map[string]string {
 
 	s.Whitespace = 1<<'\t' | 1<<'-' | 1<<'\r' | 1<<' ' | 1<<','
 	s.IsIdentRune = func(ch rune, i int) bool {
-		return unicode.IsLetter(ch) || unicode.IsDigit(ch)
+		return ch == '*' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
 	}
 	s.Mode = scanner.ScanIdents
 
@@ -97,7 +97,7 @@ func scanOpts(s *scanner.Scanner) (string, string, string) {
 	// only expect letters (at least for now)
 	s.Whitespace = 1<<'\t' | 1<<'\r' | 1<<' ' | 1<<','
 	s.IsIdentRune = func(ch rune, i int) bool {
-		return ch == '-' || ch == ';' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
+		return ch == '-' || ch == ';' || ch == '*' || unicode.IsLetter(ch) || unicode.IsDigit(ch)
 	}
 	s.Mode = scanner.ScanIdents
 
@@ -298,6 +298,7 @@ func ScanNumberedItemList(results string) ([]map[string]string, error) {
 			line += " " + scanLine(&s)
 		}
 	}
+
 	if line != "" {
 		if number != "" && line != "" {
 			ans := map[string]string{

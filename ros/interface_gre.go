@@ -1,5 +1,17 @@
 package ros
 
+func interfaceGREs() Command {
+	return Command{
+		Path:    "/interface gre",
+		Command: "print",
+		Detail:  true,
+	}
+}
+
+func (r Ros) InterfaceGREs() ([]map[string]string, error) {
+	return r.List(interfaceGREs())
+}
+
 func interfaceGRE(address string) Command {
 	return Command{
 		Path:    "/interface gre",

@@ -39,6 +39,7 @@ func setIPAddress(address, key, value string) Command {
 		},
 	}
 }
+
 func (r Ros) SetIPAddressComment(address, comment string) error {
 	return r.Exec(setIPAddress(address, "comment", comment))
 }

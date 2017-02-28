@@ -1,6 +1,7 @@
 package ros
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/ScriptRock/crypto/ssh"
@@ -11,13 +12,31 @@ type Ros struct {
 
 	Client   *ssh.Client
 	Hostname string
+	Major    int
+	Minor    int
 }
 
-func New(client *ssh.Client, hostname string) *Ros {
-	return &Ros{
+func New(client *ssh.Client, hostname string) (*Ros, error) {
+	r := Ros{
 		Client:   client,
 		Hostname: hostname,
 	}
+
+	res, err := r.SystemResource()
+	if err != nil {
+		return nil, err
+	}
+
+	if _, ok := res["version"]; !ok {
+		return nil, fmt.Errorf("no version found")
+	}
+
+	minor, major := RouterOSVersion(res["version"])
+
+	r.Major = major
+	r.Minor = minor
+
+	return &r, nil
 }
 func (r Ros) Id() string {
 	return r.Hostname
