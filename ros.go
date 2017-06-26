@@ -8,36 +8,33 @@ import (
 )
 
 type Ros struct {
-	sync.Mutex
-
 	Client   *ssh.Client
+	Error    error
 	Hostname string
-	Major    int
-	Minor    int
+
+	Major int
+	Minor int
+
+	mu sync.Mutex
 }
 
-func New(client *ssh.Client, hostname string) (*Ros, error) {
-	r := Ros{
-		Client:   client,
-		Hostname: hostname,
+func (r *Ros) Version() error {
+	if r.Major == 0 {
+		res, err := r.SystemResource()
+		if err != nil {
+			return err
+		}
+		if _, ok := res["version"]; !ok {
+			return fmt.Errorf("no version found")
+		}
+
+		major, minor := RouterOSVersion(res["version"])
+
+		r.Major, r.Minor = major, minor
 	}
-
-	res, err := r.SystemResource()
-	if err != nil {
-		return nil, err
-	}
-
-	if _, ok := res["version"]; !ok {
-		return nil, fmt.Errorf("no version found")
-	}
-
-	minor, major := RouterOSVersion(res["version"])
-
-	r.Major = major
-	r.Minor = minor
-
-	return &r, nil
+	return nil
 }
+
 func (r Ros) Id() string {
 	return r.Hostname
 }
@@ -59,17 +56,27 @@ func (r Ros) Parse(c Command) (string, error) {
 	return c.Parse()
 }
 func (r Ros) Run(c Command) ([]string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	return c.Run(r.Client)
 }
 func (r Ros) Exec(c Command) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	return c.Exec(r.Client)
 }
 func (r Ros) Values(c Command) (map[string]string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	return c.Values(r.Client)
 }
 func (r Ros) List(c Command) ([]map[string]string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	return c.List(r.Client)
 }
 func (r Ros) First(c Command) (map[string]string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	return c.First(r.Client)
 }
