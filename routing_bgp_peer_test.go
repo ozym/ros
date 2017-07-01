@@ -10,8 +10,8 @@ func TestRoutingBGPPeer(t *testing.T) {
 		c Command
 		v string
 	}{
-		{routingBGPPeer("interface", "address"), `/routing bgp peer print detail where interface="interface" remote-address="address"`},
-		{setRoutingBGPPeer("interface", "address", "key", "value"), `/routing bgp peer set [find interface="interface" remote-address="address"] key="value"`},
+		{routingBGPPeer("address"), `/routing bgp peer print detail where remote-address="address"`},
+		{setRoutingBGPPeer("address", "key", "value"), `/routing bgp peer set [find remote-address="address"] key="value"`},
 	}
 
 	for _, x := range tests {
