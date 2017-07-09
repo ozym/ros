@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestIPAddress(t *testing.T) {
+func TestIpAddress(t *testing.T) {
 
 	tests := []struct {
 		c Command
@@ -12,7 +12,7 @@ func TestIPAddress(t *testing.T) {
 	}{
 		{ipAddresses(), `/ip address print detail`},
 		{ipAddress("address"), `/ip address print detail where address="address"`},
-		{setIPAddress("address", "key", "value"), `/ip address set [find address="address"] key="value"`},
+		{setIpAddress("address", "key", "value"), `/ip address set [find address="address"] key="value"`},
 	}
 
 	for _, x := range tests {

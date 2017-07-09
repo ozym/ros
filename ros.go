@@ -19,8 +19,9 @@ const (
 )
 
 type Ros struct {
-	client   *ssh.Client
-	config   *ssh.ClientConfig
+	client *ssh.Client
+	config *ssh.ClientConfig
+
 	hostname string
 	port     int
 
@@ -104,7 +105,15 @@ func NewRos(hostname string, options ...func(*Ros) error) (*Ros, error) {
 	return r, nil
 }
 
-func (r *Ros) connect() error {
+func (r *Ros) Connect() error {
+
+	if r.err != nil {
+		return r.err
+	}
+
+	if r.client != nil {
+		return nil
+	}
 
 	hostname := net.JoinHostPort(r.hostname, strconv.Itoa(r.port))
 
@@ -137,7 +146,7 @@ func (r *Ros) Version() error {
 			return fmt.Errorf("no version found")
 		}
 
-		major, minor := RouterOSVersion(res["version"])
+		major, minor := RouterOsVersion(res["version"])
 
 		r.major, r.minor = major, minor
 	}
@@ -187,9 +196,7 @@ func (r Ros) Run(c Command) ([]string, error) {
 		return nil, r.err
 	}
 
-	if err := r.connect(); err != nil {
-		r.err = err
-
+	if err := r.Connect(); err != nil {
 		return nil, err
 	}
 
@@ -211,9 +218,7 @@ func (r Ros) Exec(c Command) error {
 		return r.err
 	}
 
-	if err := r.connect(); err != nil {
-		r.err = err
-
+	if err := r.Connect(); err != nil {
 		return err
 	}
 
@@ -235,9 +240,7 @@ func (r Ros) Values(c Command) (map[string]string, error) {
 		return nil, r.err
 	}
 
-	if err := r.connect(); err != nil {
-		r.err = err
-
+	if err := r.Connect(); err != nil {
 		return nil, err
 	}
 
@@ -258,9 +261,7 @@ func (r Ros) List(c Command) ([]map[string]string, error) {
 		return nil, r.err
 	}
 
-	if err := r.connect(); err != nil {
-		r.err = err
-
+	if err := r.Connect(); err != nil {
 		return nil, err
 	}
 
@@ -282,9 +283,7 @@ func (r Ros) First(c Command) (map[string]string, error) {
 		return nil, r.err
 	}
 
-	if err := r.connect(); err != nil {
-		r.err = err
-
+	if err := r.Connect(); err != nil {
 		return nil, err
 	}
 

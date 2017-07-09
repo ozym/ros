@@ -4,14 +4,14 @@ import (
 	"testing"
 )
 
-func TestSNMP(t *testing.T) {
+func TestSnmp(t *testing.T) {
 
 	tests := []struct {
 		c Command
 		v string
 	}{
 		{snmp(), `/snmp print`},
-		{setSNMP("key", "value"), `/snmp set key="value"`},
+		{setSnmp("key", "value"), `/snmp set key="value"`},
 	}
 
 	for _, x := range tests {

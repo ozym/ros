@@ -43,6 +43,6 @@ func setInterfaceEthernet(name, key, value string) Command {
 func (r Ros) SetInterfaceEthernetComment(name, comment string) error {
 	return r.Exec(setInterfaceEthernet(name, "comment", comment))
 }
-func (r Ros) SetInterfaceEthernetMTU(name, mtu string) error {
+func (r Ros) SetInterfaceEthernetMtu(name, mtu string) error {
 	return r.Exec(setInterfaceEthernet(name, "mtu", mtu))
 }

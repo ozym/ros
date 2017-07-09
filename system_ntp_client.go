@@ -1,17 +1,17 @@
 package ros
 
-func systemNTPClient() Command {
+func systemNtpClient() Command {
 	return Command{
 		Path:    "/system ntp client",
 		Command: "print",
 	}
 }
 
-func (r Ros) SystemNTPClient() (map[string]string, error) {
-	return r.Values(systemNTPClient())
+func (r Ros) SystemNtpClient() (map[string]string, error) {
+	return r.Values(systemNtpClient())
 }
 
-func setSystemNTPClientEnabled(enabled bool) Command {
+func setSystemNtpClientEnabled(enabled bool) Command {
 	return Command{
 		Path:    "/system ntp client",
 		Command: "set",
@@ -20,10 +20,10 @@ func setSystemNTPClientEnabled(enabled bool) Command {
 		},
 	}
 }
-func (r Ros) SetSystemNTPClientEnabled(enabled bool) error {
-	return r.Exec(setSystemNTPClientEnabled(enabled))
+func (r Ros) SetSystemNtpClientEnabled(enabled bool) error {
+	return r.Exec(setSystemNtpClientEnabled(enabled))
 }
-func setSystemNTPClientPrimaryNTP(host string) Command {
+func setSystemNtpClientPrimaryNtp(host string) Command {
 	return Command{
 		Path:    "/system ntp client",
 		Command: "set",
@@ -32,10 +32,10 @@ func setSystemNTPClientPrimaryNTP(host string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemNTPClientPrimaryNTP(zone string) error {
-	return r.Exec(setSystemNTPClientPrimaryNTP(zone))
+func (r Ros) SetSystemNtpClientPrimaryNtp(zone string) error {
+	return r.Exec(setSystemNtpClientPrimaryNtp(zone))
 }
-func setSystemNTPClientSecondaryNTP(host string) Command {
+func setSystemNtpClientSecondaryNtp(host string) Command {
 	return Command{
 		Path:    "/system ntp client",
 		Command: "set",
@@ -44,6 +44,6 @@ func setSystemNTPClientSecondaryNTP(host string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemNTPClientSecondaryNTP(zone string) error {
-	return r.Exec(setSystemNTPClientSecondaryNTP(zone))
+func (r Ros) SetSystemNtpClientSecondaryNtp(zone string) error {
+	return r.Exec(setSystemNtpClientSecondaryNtp(zone))
 }

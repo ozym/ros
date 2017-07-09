@@ -4,14 +4,14 @@ import (
 	"testing"
 )
 
-func TestIPDNS(t *testing.T) {
+func TestIpDns(t *testing.T) {
 
 	tests := []struct {
 		c Command
 		v string
 	}{
-		{ipDNS(), `/ip dns print`},
-		{setIPDNS("key", "value"), `/ip dns set key="value"`},
+		{ipDns(), `/ip dns print`},
+		{setIpDns("key", "value"), `/ip dns set key="value"`},
 	}
 
 	for _, x := range tests {

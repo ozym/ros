@@ -1,6 +1,6 @@
 package ros
 
-func routingOSPFInterfaces() Command {
+func routingOspfInterfaces() Command {
 	return Command{
 		Path:    "/routing ospf interface",
 		Command: "print",
@@ -8,11 +8,11 @@ func routingOSPFInterfaces() Command {
 	}
 }
 
-func (r Ros) RoutingOSPFInterfaces() ([]map[string]string, error) {
-	return r.List(routingOSPFInterfaces())
+func (r Ros) RoutingOspfInterfaces() ([]map[string]string, error) {
+	return r.List(routingOspfInterfaces())
 }
 
-func routingOSPFInterface(iface string) Command {
+func routingOspfInterface(iface string) Command {
 	return Command{
 		Path:    "/routing ospf interface",
 		Command: "print",
@@ -23,11 +23,11 @@ func routingOSPFInterface(iface string) Command {
 	}
 }
 
-func (r Ros) RoutingOSPFInterface(iface string) (map[string]string, error) {
-	return r.First(routingOSPFInterface(iface))
+func (r Ros) RoutingOspfInterface(iface string) (map[string]string, error) {
+	return r.First(routingOspfInterface(iface))
 }
 
-func setRoutingOSPFInterface(iface, key, value string) Command {
+func setRoutingOspfInterface(iface, key, value string) Command {
 	return Command{
 		Path:    "/routing ospf interface",
 		Command: "set",
@@ -39,9 +39,9 @@ func setRoutingOSPFInterface(iface, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingOSPFInterfaceComment(iface, comment string) error {
-	return r.Exec(setRoutingOSPFInterface(iface, "comment", comment))
+func (r Ros) SetRoutingOspfInterfaceComment(iface, comment string) error {
+	return r.Exec(setRoutingOspfInterface(iface, "comment", comment))
 }
-func (r Ros) SetRoutingOSPFInterfaceCost(iface, cost string) error {
-	return r.Exec(setRoutingOSPFInterface(iface, "cost", cost))
+func (r Ros) SetRoutingOspfInterfaceCost(iface, cost string) error {
+	return r.Exec(setRoutingOspfInterface(iface, "cost", cost))
 }

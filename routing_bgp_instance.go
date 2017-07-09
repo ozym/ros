@@ -1,6 +1,6 @@
 package ros
 
-func routingBGPInstances() Command {
+func routingBgpInstances() Command {
 	return Command{
 		Path:    "/routing bgp instance",
 		Command: "print",
@@ -8,11 +8,11 @@ func routingBGPInstances() Command {
 	}
 }
 
-func (r Ros) RoutingBGPInstances() ([]map[string]string, error) {
-	return r.List(routingBGPInstances())
+func (r Ros) RoutingBgpInstances() ([]map[string]string, error) {
+	return r.List(routingBgpInstances())
 }
 
-func routingBGPInstance(name string) Command {
+func routingBgpInstance(name string) Command {
 	return Command{
 		Path:    "/routing bgp instance",
 		Command: "print",
@@ -23,11 +23,11 @@ func routingBGPInstance(name string) Command {
 	}
 }
 
-func (r Ros) RoutingBGPInstance(name string) (map[string]string, error) {
-	return r.First(routingBGPInstance(name))
+func (r Ros) RoutingBgpInstance(name string) (map[string]string, error) {
+	return r.First(routingBgpInstance(name))
 }
 
-func setRoutingBGPInstance(name, key, value string) Command {
+func setRoutingBgpInstance(name, key, value string) Command {
 	return Command{
 		Path:    "/routing bgp instance",
 		Command: "set",
@@ -40,10 +40,10 @@ func setRoutingBGPInstance(name, key, value string) Command {
 	}
 }
 
-func (r Ros) SetRoutingBGPInstanceRouterId(name, router_id string) error {
-	return r.Exec(setRoutingBGPInstance(name, "router-id", router_id))
+func (r Ros) SetRoutingBgpInstanceRouterId(name, router_id string) error {
+	return r.Exec(setRoutingBgpInstance(name, "router-id", router_id))
 }
 
-func (r Ros) SetRoutingBGPInstanceComment(name, comment string) error {
-	return r.Exec(setRoutingBGPInstance(name, "comment", comment))
+func (r Ros) SetRoutingBgpInstanceComment(name, comment string) error {
+	return r.Exec(setRoutingBgpInstance(name, "comment", comment))
 }

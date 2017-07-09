@@ -1,6 +1,6 @@
 package ros
 
-func routingOSPFInstances() Command {
+func routingOspfInstances() Command {
 	return Command{
 		Path:    "/routing ospf instance",
 		Command: "print",
@@ -8,11 +8,11 @@ func routingOSPFInstances() Command {
 	}
 }
 
-func (r Ros) RoutingOSPFInstances() ([]map[string]string, error) {
-	return r.List(routingOSPFInstances())
+func (r Ros) RoutingOspfInstances() ([]map[string]string, error) {
+	return r.List(routingOspfInstances())
 }
 
-func routingOSPFInstance(name string) Command {
+func routingOspfInstance(name string) Command {
 	return Command{
 		Path:    "/routing ospf instance",
 		Command: "print",
@@ -23,11 +23,11 @@ func routingOSPFInstance(name string) Command {
 	}
 }
 
-func (r Ros) RoutingOSPFInstance(name string) (map[string]string, error) {
-	return r.First(routingOSPFInstance(name))
+func (r Ros) RoutingOspfInstance(name string) (map[string]string, error) {
+	return r.First(routingOspfInstance(name))
 }
 
-func setRoutingOSPFInstance(name, key, value string) Command {
+func setRoutingOspfInstance(name, key, value string) Command {
 	return Command{
 		Path:    "/routing ospf instance",
 		Command: "set",
@@ -39,9 +39,9 @@ func setRoutingOSPFInstance(name, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingOSPFInstanceRouterId(name, router_id string) error {
-	return r.Exec(setRoutingOSPFInstance(name, "router-id", router_id))
+func (r Ros) SetRoutingOspfInstanceRouterId(name, router_id string) error {
+	return r.Exec(setRoutingOspfInstance(name, "router-id", router_id))
 }
-func (r Ros) SetRoutingOSPFInstanceComment(name, comment string) error {
-	return r.Exec(setRoutingOSPFInstance(name, "comment", comment))
+func (r Ros) SetRoutingOspfInstanceComment(name, comment string) error {
+	return r.Exec(setRoutingOspfInstance(name, "comment", comment))
 }

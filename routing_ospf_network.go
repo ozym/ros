@@ -1,6 +1,6 @@
 package ros
 
-func routingOSPFNetworks() Command {
+func routingOspfNetworks() Command {
 	return Command{
 		Path:    "/routing ospf network",
 		Command: "print",
@@ -8,11 +8,11 @@ func routingOSPFNetworks() Command {
 	}
 }
 
-func (r Ros) RoutingOSPFNetworks() ([]map[string]string, error) {
-	return r.List(routingOSPFNetworks())
+func (r Ros) RoutingOspfNetworks() ([]map[string]string, error) {
+	return r.List(routingOspfNetworks())
 }
 
-func routingOSPFNetwork(network string) Command {
+func routingOspfNetwork(network string) Command {
 	return Command{
 		Path:    "/routing ospf network",
 		Command: "print",
@@ -23,11 +23,11 @@ func routingOSPFNetwork(network string) Command {
 	}
 }
 
-func (r Ros) RoutingOSPFNetwork(network string) (map[string]string, error) {
-	return r.First(routingOSPFNetwork(network))
+func (r Ros) RoutingOspfNetwork(network string) (map[string]string, error) {
+	return r.First(routingOspfNetwork(network))
 }
 
-func setRoutingOSPFNetwork(network, key, value string) Command {
+func setRoutingOspfNetwork(network, key, value string) Command {
 	return Command{
 		Path:    "/routing ospf network",
 		Command: "set",
@@ -39,6 +39,6 @@ func setRoutingOSPFNetwork(network, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingOSPFNetworkComment(network, comment string) error {
-	return r.Exec(setRoutingOSPFNetwork(network, "comment", comment))
+func (r Ros) SetRoutingOspfNetworkComment(network, comment string) error {
+	return r.Exec(setRoutingOspfNetwork(network, "comment", comment))
 }

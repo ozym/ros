@@ -1,6 +1,6 @@
 package ros
 
-func routingBGPNetworks() Command {
+func routingBgpNetworks() Command {
 	return Command{
 		Path:    "/routing bgp network",
 		Command: "print",
@@ -8,11 +8,11 @@ func routingBGPNetworks() Command {
 	}
 }
 
-func (r Ros) RoutingBGPNetworks() ([]map[string]string, error) {
-	return r.List(routingBGPNetworks())
+func (r Ros) RoutingBgpNetworks() ([]map[string]string, error) {
+	return r.List(routingBgpNetworks())
 }
 
-func routingBGPNetwork(network string) Command {
+func routingBgpNetwork(network string) Command {
 	return Command{
 		Path:    "/routing bgp network",
 		Command: "print",
@@ -23,11 +23,11 @@ func routingBGPNetwork(network string) Command {
 	}
 }
 
-func (r Ros) RoutingBGPNetwork(network string) (map[string]string, error) {
-	return r.First(routingBGPNetwork(network))
+func (r Ros) RoutingBgpNetwork(network string) (map[string]string, error) {
+	return r.First(routingBgpNetwork(network))
 }
 
-func setRoutingBGPNetwork(network, key, value string) Command {
+func setRoutingBgpNetwork(network, key, value string) Command {
 	return Command{
 		Path:    "/routing bgp network",
 		Command: "set",
@@ -39,6 +39,6 @@ func setRoutingBGPNetwork(network, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingBGPNetworkComment(network, comment string) error {
-	return r.Exec(setRoutingBGPNetwork(network, "comment", comment))
+func (r Ros) SetRoutingBgpNetworkComment(network, comment string) error {
+	return r.Exec(setRoutingBgpNetwork(network, "comment", comment))
 }

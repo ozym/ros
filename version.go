@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func RouterOSVersion(version string) (int, int) {
+func RouterOsVersion(version string) (int, int) {
 	var major, minor int
 
 	if split := strings.Split(version, " "); len(split) > 0 {

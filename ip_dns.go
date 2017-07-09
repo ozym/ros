@@ -1,17 +1,17 @@
 package ros
 
-func ipDNS() Command {
+func ipDns() Command {
 	return Command{
 		Path:    "/ip dns",
 		Command: "print",
 	}
 }
 
-func (r Ros) IPDNS() (map[string]string, error) {
-	return r.Values(ipDNS())
+func (r Ros) IpDns() (map[string]string, error) {
+	return r.Values(ipDns())
 }
 
-func setIPDNS(key, value string) Command {
+func setIpDns(key, value string) Command {
 	return Command{
 		Path:    "/ip dns",
 		Command: "set",
@@ -20,9 +20,9 @@ func setIPDNS(key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetIPDNSServers(servers string) error {
-	return r.Exec(setIPDNS("servers", servers))
+func (r Ros) SetIpDnsServers(servers string) error {
+	return r.Exec(setIpDns("servers", servers))
 }
-func (r Ros) SetIPDNSAllowRemoteRequests(allow bool) error {
-	return r.Exec(setIPDNS("allow-remote-requests", FormatBool(allow)))
+func (r Ros) SetIpDnsAllowRemoteRequests(allow bool) error {
+	return r.Exec(setIpDns("allow-remote-requests", FormatBool(allow)))
 }

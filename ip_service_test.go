@@ -4,14 +4,14 @@ import (
 	"testing"
 )
 
-func TestIPService(t *testing.T) {
+func TestIpService(t *testing.T) {
 
 	tests := []struct {
 		c Command
 		v string
 	}{
 		{ipService("name"), `/ip service print detail where name="name"`},
-		{setIPService("name", "key", "value"), `/ip service set [find name="name"] key="value"`},
+		{setIpService("name", "key", "value"), `/ip service set [find name="name"] key="value"`},
 	}
 
 	for _, x := range tests {

@@ -7,11 +7,11 @@ func snmp() Command {
 	}
 }
 
-func (r Ros) SNMP() (map[string]string, error) {
+func (r Ros) Snmp() (map[string]string, error) {
 	return r.Values(snmp())
 }
 
-func setSNMP(key, value string) Command {
+func setSnmp(key, value string) Command {
 	return Command{
 		Path:    "/snmp",
 		Command: "set",
@@ -21,12 +21,12 @@ func setSNMP(key, value string) Command {
 	}
 }
 
-func (r Ros) SetSNMPEnabled(enabled bool) error {
-	return r.Exec(setSNMP("enabled", FormatBool(enabled)))
+func (r Ros) SetSnmpEnabled(enabled bool) error {
+	return r.Exec(setSnmp("enabled", FormatBool(enabled)))
 }
-func (r Ros) SetSNMPLocation(location string) error {
-	return r.Exec(setSNMP("location", location))
+func (r Ros) SetSnmpLocation(location string) error {
+	return r.Exec(setSnmp("location", location))
 }
-func (r Ros) SetSNMPContact(contact string) error {
-	return r.Exec(setSNMP("contact", contact))
+func (r Ros) SetSnmpContact(contact string) error {
+	return r.Exec(setSnmp("contact", contact))
 }

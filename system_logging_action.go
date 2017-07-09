@@ -43,7 +43,7 @@ func (r Ros) SetSystemLoggingActionRemotePort(name string, port int) error {
 func (r Ros) SetSystemLoggingActionSrcAddress(name string, address string) error {
 	return r.Exec(setSystemLoggingAction(name, "src-address", address))
 }
-func (r Ros) SetSystemLoggingActionBSDSyslog(name string, bsd bool) error {
+func (r Ros) SetSystemLoggingActionBsdSyslog(name string, bsd bool) error {
 	return r.Exec(setSystemLoggingAction(name, "bsd-syslog", FormatBool(bsd)))
 }
 func (r Ros) SetSystemLoggingActionSyslogSeverity(name, severity string) error {

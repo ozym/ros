@@ -4,14 +4,14 @@ import (
 	"testing"
 )
 
-func TestRoutingBGPPeer(t *testing.T) {
+func TestRoutingBgpPeer(t *testing.T) {
 
 	tests := []struct {
 		c Command
 		v string
 	}{
-		{routingBGPPeer("address"), `/routing bgp peer print detail where remote-address="address"`},
-		{setRoutingBGPPeer("address", "key", "value"), `/routing bgp peer set [find remote-address="address"] key="value"`},
+		{routingBgpPeer("address"), `/routing bgp peer print detail where remote-address="address"`},
+		{setRoutingBgpPeer("address", "key", "value"), `/routing bgp peer set [find remote-address="address"] key="value"`},
 	}
 
 	for _, x := range tests {

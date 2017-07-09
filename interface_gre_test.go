@@ -4,14 +4,14 @@ import (
 	"testing"
 )
 
-func TestInterfaceGRE(t *testing.T) {
+func TestInterfaceGre(t *testing.T) {
 
 	tests := []struct {
 		c Command
 		v string
 	}{
-		{interfaceGRE("address"), `/interface gre print detail where remote-address="address"`},
-		{setInterfaceGRE("address", "key", "value"), `/interface gre set [find remote-address="address"] key="value"`},
+		{interfaceGre("address"), `/interface gre print detail where remote-address="address"`},
+		{setInterfaceGre("address", "key", "value"), `/interface gre set [find remote-address="address"] key="value"`},
 	}
 
 	for _, x := range tests {

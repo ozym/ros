@@ -1,6 +1,6 @@
 package ros
 
-func routingBGPAggregates() Command {
+func routingBgpAggregates() Command {
 	return Command{
 		Path:    "/routing bgp aggregate",
 		Command: "print",
@@ -8,11 +8,11 @@ func routingBGPAggregates() Command {
 	}
 }
 
-func (r Ros) RoutingBGPAggregates() ([]map[string]string, error) {
-	return r.List(routingBGPAggregates())
+func (r Ros) RoutingBgpAggregates() ([]map[string]string, error) {
+	return r.List(routingBgpAggregates())
 }
 
-func routingBGPAggregate(instance, prefix string) Command {
+func routingBgpAggregate(instance, prefix string) Command {
 	return Command{
 		Path:    "/routing bgp aggregate",
 		Command: "print",
@@ -24,11 +24,11 @@ func routingBGPAggregate(instance, prefix string) Command {
 	}
 }
 
-func (r Ros) RoutingBGPAggregate(instance, prefix string) (map[string]string, error) {
-	return r.First(routingBGPAggregate(instance, prefix))
+func (r Ros) RoutingBgpAggregate(instance, prefix string) (map[string]string, error) {
+	return r.First(routingBgpAggregate(instance, prefix))
 }
 
-func setRoutingBGPAggregate(instance, prefix, key, value string) Command {
+func setRoutingBgpAggregate(instance, prefix, key, value string) Command {
 	return Command{
 		Path:    "/routing bgp aggregate",
 		Command: "set",
@@ -41,6 +41,6 @@ func setRoutingBGPAggregate(instance, prefix, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingBGPAggregateComment(instance, prefix, comment string) error {
-	return r.Exec(setRoutingBGPAggregate(instance, prefix, "comment", comment))
+func (r Ros) SetRoutingBgpAggregateComment(instance, prefix, comment string) error {
+	return r.Exec(setRoutingBgpAggregate(instance, prefix, "comment", comment))
 }

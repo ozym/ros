@@ -1,6 +1,6 @@
 package ros
 
-func routingBGPPeers() Command {
+func routingBgpPeers() Command {
 	return Command{
 		Path:    "/routing bgp peer",
 		Command: "print",
@@ -8,11 +8,11 @@ func routingBGPPeers() Command {
 	}
 }
 
-func (r Ros) RoutingBGPPeers() ([]map[string]string, error) {
-	return r.List(routingBGPPeers())
+func (r Ros) RoutingBgpPeers() ([]map[string]string, error) {
+	return r.List(routingBgpPeers())
 }
 
-func routingBGPPeer(addr string) Command {
+func routingBgpPeer(addr string) Command {
 	return Command{
 		Path:    "/routing bgp peer",
 		Command: "print",
@@ -23,11 +23,11 @@ func routingBGPPeer(addr string) Command {
 	}
 }
 
-func (r Ros) RoutingBGPPeer(addr string) (map[string]string, error) {
-	return r.First(routingBGPPeer(addr))
+func (r Ros) RoutingBgpPeer(addr string) (map[string]string, error) {
+	return r.First(routingBgpPeer(addr))
 }
 
-func setRoutingBGPPeer(addr, key, value string) Command {
+func setRoutingBgpPeer(addr, key, value string) Command {
 	return Command{
 		Path:    "/routing bgp peer",
 		Command: "set",
@@ -39,9 +39,9 @@ func setRoutingBGPPeer(addr, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingBGPPeerComment(addr, comment string) error {
-	return r.Exec(setRoutingBGPPeer(addr, "comment", comment))
+func (r Ros) SetRoutingBgpPeerComment(addr, comment string) error {
+	return r.Exec(setRoutingBgpPeer(addr, "comment", comment))
 }
-func (r Ros) SetRoutingBGPPeerName(addr, name string) error {
-	return r.Exec(setRoutingBGPPeer(addr, "name", name))
+func (r Ros) SetRoutingBgpPeerName(addr, name string) error {
+	return r.Exec(setRoutingBgpPeer(addr, "name", name))
 }
