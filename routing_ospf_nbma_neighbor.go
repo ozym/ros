@@ -1,5 +1,9 @@
 package ros
 
+import (
+	"strconv"
+)
+
 func routingOspfNbmaNeighbors() Command {
 	return Command{
 		Path:    "/routing ospf nbma-neighbor",
@@ -41,4 +45,10 @@ func setRoutingOspfNbmaNeighbor(address, key, value string) Command {
 }
 func (r Ros) SetRoutingOspfNbmaNeighborComment(address, comment string) error {
 	return r.Exec(setRoutingOspfNbmaNeighbor(address, "comment", comment))
+}
+func (r Ros) SetRoutingOspfNbmaNeighborPollInterval(address, interval string) error {
+	return r.Exec(setRoutingOspfNbmaNeighbor(address, "poll-interval", interval))
+}
+func (r Ros) SetRoutingOspfNbmaNeighborPriority(address string, priority int) error {
+	return r.Exec(setRoutingOspfNbmaNeighbor(address, "priority", strconv.Itoa(priority)))
 }
