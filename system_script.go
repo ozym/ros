@@ -24,7 +24,9 @@ func addSystemScript(name, policy, source string) Command {
 		Path:    "/system script",
 		Command: "add",
 		Params: map[string]string{
-			"name":   name,
+			"name": name,
+		},
+		Extra: map[string]string{
 			"policy": policy,
 			"source": source,
 		},
