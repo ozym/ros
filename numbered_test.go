@@ -31,6 +31,35 @@ func TestNumbered(t *testing.T) {
 			},
 		},
 		{
+			`Flags: I - invalid
+			 0   name="lk2hillroad-climie_up" owner="admin+cte" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive run-count=0 source={/ip address set [find address="10.54.242.2/28" ] disabled=no}
+
+			  1   name="lk2hillroad-climie_down" owner="admin+cte" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive run-count=0 source={/ip address set [find address="10.54.242.2/28" ] disabled=yes}
+			  `,
+			[]map[string]string{
+				map[string]string{
+					"number":    "0",
+					"name":      "lk2hillroad-climie_up",
+					"owner":     "admin+cte",
+					"policy":    "ftp,reboot,read,write,policy,test,password,sniff,sensitive",
+					"run-count": "0",
+					"source":    "{/ip address set [find address=\"10.54.242.2/28\" ] disabled=no}",
+					"comment":   "",
+					"invalid":   "no",
+				},
+				map[string]string{
+					"number":    "1",
+					"name":      "lk2hillroad-climie_down",
+					"owner":     "admin+cte",
+					"policy":    "ftp,reboot,read,write,policy,test,password,sniff,sensitive",
+					"run-count": "0",
+					"source":    "{/ip address set [find address=\"10.54.242.2/28\" ] disabled=yes}",
+					"comment":   "",
+					"invalid":   "no",
+				},
+			},
+		},
+		{
 			`Flags: X - disabled
 			 0   ;;; Monitor Link Between Cotton and Climie
 			      host=10.242.0.17 timeout=998ms interval=10s since=nov/13/2016 11:37:06 status=up up-script=lk2cotton-climie_up down-script=lk2cotton-climie_down
