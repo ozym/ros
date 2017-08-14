@@ -316,6 +316,154 @@ func TestNumbered(t *testing.T) {
 				},
 			},
 		},
+		{`Flags: I - invalid
+		 0   name="ospf-restart" owner="admin" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive run-count=0 source=
+		       :local State;
+		       :local Interface;
+		       :local Network;
+		       :local Address;
+		       :local helpAdd;
+		       :local help0;
+		       :local help1;
+		       :local ipNetAdd;
+		       :local networkName;
+		       :local fileName value="ospf_restart.txt";
+
+		       # If previous data file not found, then create new one
+		       :if ([:len [/file find where name=$fileName]] < 1 ) do={
+		       /file print file=$fileName where name=$fileName;
+		       # Add some delay, for slow or high load routers
+		       /delay delay-time=2;
+		       # Set begginning count to 0
+		       /file set $fileName contents="0";
+		       }
+
+
+		       :foreach i in=[/routing ospf neighbor find] do={
+		           :set State [/routing ospf neighbor get $i value-name=state];
+		           :put "\nNetwork state: $State";
+
+
+		           :if ($State = "Init" || $State = "Down") do={
+		               :put "Condition met";
+		       # read some working variables
+		               :set Interface [/routing ospf neighbor get $i value-name=interface];
+		               :set Address [/routing ospf neighbor get $i value-name=address];
+		               :put "OSPF neighbor interface:                              $Interface";
+		               :put "OSPF neighbor address:                                $Address";
+		               :set helpAdd ($Address&255.255.255.0);
+		               :put "OSPF neighbor addres without last octet:              $helpAdd";
+		       # find all networks in ip addresses matching OSPF neighbor address without last octet - Intermediate Step
+		               :set ipNetAdd [/ip address find where (network&255.255.255.0)=$helpAdd];
+		               :put "IP address item where is OSPF neightbor matching address without last octet: "
+		               :put $ipNetAdd;
+		       # find the only network in ip addresses matching OSPF neighbor address and interface
+		               :set help1 [/ip address find where interface=$Interface && (network&255.255.255.0)=$helpAdd ];
+		               :put "IP address item matching network AND interface:       $help1";
+		       # find ospf network to be resetet
+		               :set Network [/ip address get $help1 value-name=network];
+		               :put "Which OSPF network should be reseted:                 $Network";
+		       # find ospf network item to disable + enable
+		               :set help0 [/routing ospf network find where network~"$Network/*"];
+		               :set networkName [/routing ospf network get $help0 value-name=comment];
+		               :put "OSPF network item number to be reseted:               $help0";
+		       # Restart OSPF network
+		               /routing ospf network set $help0 disabled=yes;
+		               :put "Network has been DISABLED";
+		               /routing ospf network print;
+		               [/routing ospf network set $help0 disabled=no];
+		               :put "Network has been ENABLED";
+		       # Add record to log
+		               :log info "OSPF network $Network - $networkName has been RESTARTED";
+		       # Update restart count in file
+		               :local before value=[/file get $fileName contents];
+		               /file set $fileName contents= ($before + 1);
+
+		               /routing ospf network print;
+		           } else={
+		               :put "Condition NOT met";
+		             }
+		       }
+		`,
+			[]map[string]string{
+				map[string]string{
+					"number":    "0",
+					"name":      "ospf-restart",
+					"owner":     "admin",
+					"policy":    "ftp,reboot,read,write,policy,test,password,sniff,sensitive",
+					"run-count": "0",
+					"source": `
+		       :local State;
+		       :local Interface;
+		       :local Network;
+		       :local Address;
+		       :local helpAdd;
+		       :local help0;
+		       :local help1;
+		       :local ipNetAdd;
+		       :local networkName;
+		       :local fileName value="ospf_restart.txt";
+
+		       # If previous data file not found, then create new one
+		       :if ([:len [/file find where name=$fileName]] < 1 ) do={
+		       /file print file=$fileName where name=$fileName;
+		       # Add some delay, for slow or high load routers
+		       /delay delay-time=2;
+		       # Set begginning count to 0
+		       /file set $fileName contents="0";
+		       }
+
+
+		       :foreach i in=[/routing ospf neighbor find] do={
+		           :set State [/routing ospf neighbor get $i value-name=state];
+		           :put "\nNetwork state: $State";
+
+
+		           :if ($State = "Init" || $State = "Down") do={
+		               :put "Condition met";
+		       # read some working variables
+		               :set Interface [/routing ospf neighbor get $i value-name=interface];
+		               :set Address [/routing ospf neighbor get $i value-name=address];
+		               :put "OSPF neighbor interface:                              $Interface";
+		               :put "OSPF neighbor address:                                $Address";
+		               :set helpAdd ($Address&255.255.255.0);
+		               :put "OSPF neighbor addres without last octet:              $helpAdd";
+		       # find all networks in ip addresses matching OSPF neighbor address without last octet - Intermediate Step
+		               :set ipNetAdd [/ip address find where (network&255.255.255.0)=$helpAdd];
+		               :put "IP address item where is OSPF neightbor matching address without last octet: "
+		               :put $ipNetAdd;
+		       # find the only network in ip addresses matching OSPF neighbor address and interface
+		               :set help1 [/ip address find where interface=$Interface && (network&255.255.255.0)=$helpAdd ];
+		               :put "IP address item matching network AND interface:       $help1";
+		       # find ospf network to be resetet
+		               :set Network [/ip address get $help1 value-name=network];
+		               :put "Which OSPF network should be reseted:                 $Network";
+		       # find ospf network item to disable + enable
+		               :set help0 [/routing ospf network find where network~"$Network/*"];
+		               :set networkName [/routing ospf network get $help0 value-name=comment];
+		               :put "OSPF network item number to be reseted:               $help0";
+		       # Restart OSPF network
+		               /routing ospf network set $help0 disabled=yes;
+		               :put "Network has been DISABLED";
+		               /routing ospf network print;
+		               [/routing ospf network set $help0 disabled=no];
+		               :put "Network has been ENABLED";
+		       # Add record to log
+		               :log info "OSPF network $Network - $networkName has been RESTARTED";
+		       # Update restart count in file
+		               :local before value=[/file get $fileName contents];
+		               /file set $fileName contents= ($before + 1);
+
+		               /routing ospf network print;
+		           } else={
+		               :put "Condition NOT met";
+		             }
+		       }`,
+					"comment": "",
+					"invalid": "no",
+				},
+			},
+		},
 	}
 
 	for _, test := range tests {

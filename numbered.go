@@ -196,6 +196,13 @@ func scanKeyValues(line string) map[string]string {
 
 		if s.Peek() == '=' {
 			key = s.TokenText()
+			if key == "source" {
+				if tok = s.Next(); tok == scanner.EOF {
+					continue
+				}
+				res[key] = strings.TrimSpace(scanRaw(&s))
+				//fmt.Println("->", key, "<->", res[key], "<-")
+			}
 		} else if s.TokenText() == "{" {
 			res[key] += s.TokenText() + scanRaw(&s)
 		} else if s.TokenText() != "=" {
@@ -232,9 +239,9 @@ func ScanNumberedItemList(results string) ([]map[string]string, error) {
 	// precondition the input lines ...
 	for i := 1; i < len(lines); i++ {
 		switch {
-		case strings.HasPrefix(strings.TrimLeftFunc(lines[i-1], unicode.IsSpace), "#"):
-			// remove any general comments
-			lines = append(lines[:i-1], lines[i:]...)
+		//case strings.HasPrefix(strings.TrimLeftFunc(lines[i-1], unicode.IsSpace), "#"):
+		// remove any general comments
+		//	lines = append(lines[:i-1], lines[i:]...)
 		case strings.HasPrefix(strings.TrimLeftFunc(lines[i-1], unicode.IsSpace), "Flags:"):
 			// recover the flags line
 			flags = scanFlags(strings.Replace(lines[i-1], "Flags:", "", -1))
@@ -249,6 +256,25 @@ func ScanNumberedItemList(results string) ([]map[string]string, error) {
 			} else {
 				lines = lines[:i]
 			}
+		}
+	}
+
+	// check for sources ....
+	for i := 0; i < len(lines); i++ {
+		if !strings.HasSuffix(lines[i], " source=") {
+			continue
+		}
+		var chop int
+		for j := i + 1; j < len(lines); j++ {
+			s := strings.TrimSpace(lines[j])
+			if len(s) > 0 && !strings.ContainsAny(s[:1], "#:/{}[]") {
+				break
+			}
+			lines[i] = lines[i] + "\\n" + strings.Replace(lines[j], "\\n", "\\N", -1)
+			chop++
+		}
+		if chop > 0 {
+			lines = append(lines[:i+1], lines[i+chop:]...)
 		}
 	}
 
@@ -318,6 +344,9 @@ func ScanNumberedItemList(results string) ([]map[string]string, error) {
 			}
 			for k, v := range scanKeyValues(line) {
 				ans[k] = v
+			}
+			if s, ok := ans["source"]; ok {
+				ans["source"] = strings.TrimRightFunc(strings.Replace(strings.Replace(s, "\\n", "\n", -1), "\\N", "\\n", -1), unicode.IsSpace)
 			}
 			list = append(list, ans)
 		}
