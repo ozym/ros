@@ -143,6 +143,31 @@ func scanRaw(s *scanner.Scanner) string {
 	s.Mode = 0
 	s.Whitespace = 0
 
+	var tok rune
+	for tok != scanner.EOF {
+		if tok = s.Scan(); tok == scanner.EOF {
+			continue
+		}
+		res += string(tok)
+	}
+
+	return res
+}
+
+// scan a script, i.e. "{/ip address set [find address="10.54.242.1/28" ] disabled=no}"
+func scanWrapped(s *scanner.Scanner) string {
+	var res string
+
+	mode := s.Mode
+	ws := s.Whitespace
+	defer func() {
+		s.Mode = mode
+		s.Whitespace = ws
+	}()
+
+	s.Mode = 0
+	s.Whitespace = 0
+
 	// have one already
 	bracket := 1
 
@@ -200,11 +225,10 @@ func scanKeyValues(line string) map[string]string {
 				if tok = s.Next(); tok == scanner.EOF {
 					continue
 				}
-				res[key] = strings.TrimSpace(scanRaw(&s))
-				//fmt.Println("->", key, "<->", res[key], "<-")
+				res[key] += strings.TrimSpace(scanRaw(&s))
 			}
 		} else if s.TokenText() == "{" {
-			res[key] += s.TokenText() + scanRaw(&s)
+			res[key] += s.TokenText() + scanWrapped(&s)
 		} else if s.TokenText() != "=" {
 			u, err := strconv.Unquote(s.TokenText())
 			if err != nil {
@@ -274,7 +298,7 @@ func ScanNumberedItemList(results string) ([]map[string]string, error) {
 			chop++
 		}
 		if chop > 0 {
-			lines = append(lines[:i+1], lines[i+chop:]...)
+			lines = append(lines[:i+1], lines[i+chop+1:]...)
 		}
 	}
 
