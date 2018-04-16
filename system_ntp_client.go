@@ -7,7 +7,7 @@ func systemNtpClient() Command {
 	}
 }
 
-func (r Ros) SystemNtpClient() (map[string]string, error) {
+func (r *Ros) SystemNtpClient() (map[string]string, error) {
 	return r.Values(systemNtpClient())
 }
 
@@ -20,7 +20,7 @@ func setSystemNtpClientEnabled(enabled bool) Command {
 		},
 	}
 }
-func (r Ros) SetSystemNtpClientEnabled(enabled bool) error {
+func (r *Ros) SetSystemNtpClientEnabled(enabled bool) error {
 	return r.Exec(setSystemNtpClientEnabled(enabled))
 }
 func setSystemNtpClientPrimaryNtp(host string) Command {
@@ -32,7 +32,7 @@ func setSystemNtpClientPrimaryNtp(host string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemNtpClientPrimaryNtp(zone string) error {
+func (r *Ros) SetSystemNtpClientPrimaryNtp(zone string) error {
 	return r.Exec(setSystemNtpClientPrimaryNtp(zone))
 }
 func setSystemNtpClientSecondaryNtp(host string) Command {
@@ -44,6 +44,6 @@ func setSystemNtpClientSecondaryNtp(host string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemNtpClientSecondaryNtp(zone string) error {
+func (r *Ros) SetSystemNtpClientSecondaryNtp(zone string) error {
 	return r.Exec(setSystemNtpClientSecondaryNtp(zone))
 }

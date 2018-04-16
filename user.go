@@ -11,7 +11,7 @@ func user(name string) Command {
 	}
 }
 
-func (r Ros) User(name string) (map[string]string, error) {
+func (r *Ros) User(name string) (map[string]string, error) {
 	return r.First(user(name))
 }
 
@@ -28,7 +28,7 @@ func addUser(name, group, password string) Command {
 		},
 	}
 }
-func (r Ros) AddUser(name, group, password string) error {
+func (r *Ros) AddUser(name, group, password string) error {
 	if name != "admin" {
 		return r.Exec(addUser(name, group, password))
 	}
@@ -44,7 +44,7 @@ func removeUser(name string) Command {
 		},
 	}
 }
-func (r Ros) RemoveUser(name string) error {
+func (r *Ros) RemoveUser(name string) error {
 	if name != "admin" {
 		return r.Exec(removeUser(name))
 	}
@@ -64,12 +64,21 @@ func setUser(name, key, value string) Command {
 	}
 }
 
-func (r Ros) SetUserGroup(name, group string) error {
+func (r *Ros) SetUserGroup(name, group string) error {
 	if name != "admin" {
 		return r.Exec(setUser(name, "group", group))
 	}
 	return nil
 }
-func (r Ros) SetUserComment(name, comment string) error {
+
+func (r *Ros) SetUserComment(name, comment string) error {
 	return r.Exec(setUser(name, "comment", comment))
+}
+
+func (r *Ros) SetUserPassword(name, password string) error {
+	return r.Exec(setUser(name, "password", password))
+}
+
+func (r *Ros) SetUserAddress(name, address string) error {
+	return r.Exec(setUser(name, "address", address))
 }

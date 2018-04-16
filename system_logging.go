@@ -12,7 +12,7 @@ func systemLogging(action, topics string) Command {
 	}
 }
 
-func (r Ros) SystemLogging(action, topics string) (map[string]string, error) {
+func (r *Ros) SystemLogging(action, topics string) (map[string]string, error) {
 	return r.Values(systemLogging(action, topics))
 }
 
@@ -26,7 +26,7 @@ func addSystemLogging(action, topics string) Command {
 		},
 	}
 }
-func (r Ros) AddSystemLogging(action, topics string) error {
+func (r *Ros) AddSystemLogging(action, topics string) error {
 	return r.Exec(addSystemLogging(action, topics))
 }
 
@@ -40,7 +40,7 @@ func removeSystemLogging(action, topics string) Command {
 		},
 	}
 }
-func (r Ros) RemoveSystemLogging(action, topics string) error {
+func (r *Ros) RemoveSystemLogging(action, topics string) error {
 	return r.Exec(removeSystemLogging(action, topics))
 }
 
@@ -57,6 +57,6 @@ func setSystemLoggingPrefix(action, topics, prefix string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemLoggingPrefix(action, topics, prefix string) error {
+func (r *Ros) SetSystemLoggingPrefix(action, topics, prefix string) error {
 	return r.Exec(setSystemLoggingPrefix(action, topics, prefix))
 }

@@ -8,6 +8,6 @@ func interfaces() Command {
 	}
 }
 
-func (r Ros) Interfaces() ([]map[string]string, error) {
+func (r *Ros) Interfaces() ([]map[string]string, error) {
 	return r.List(interfaces())
 }

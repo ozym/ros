@@ -8,7 +8,7 @@ func interfaceWirelesses() Command {
 	}
 }
 
-func (r Ros) InterfaceWirelesses() ([]map[string]string, error) {
+func (r *Ros) InterfaceWirelesses() ([]map[string]string, error) {
 	return r.List(interfaceWirelesses())
 }
 
@@ -23,7 +23,7 @@ func interfaceWireless(name string) Command {
 	}
 }
 
-func (r Ros) InterfaceWireless(name string) (map[string]string, error) {
+func (r *Ros) InterfaceWireless(name string) (map[string]string, error) {
 	return r.First(interfaceWireless(name))
 }
 
@@ -40,6 +40,6 @@ func setInterfaceWireless(name, key, value string) Command {
 	}
 }
 
-func (r Ros) SetInterfaceWirelessComment(name, comment string) error {
+func (r *Ros) SetInterfaceWirelessComment(name, comment string) error {
 	return r.Exec(setInterfaceWireless(name, "comment", comment))
 }

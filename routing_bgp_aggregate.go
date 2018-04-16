@@ -8,7 +8,7 @@ func routingBgpAggregates() Command {
 	}
 }
 
-func (r Ros) RoutingBgpAggregates() ([]map[string]string, error) {
+func (r *Ros) RoutingBgpAggregates() ([]map[string]string, error) {
 	return r.List(routingBgpAggregates())
 }
 
@@ -24,7 +24,7 @@ func routingBgpAggregate(instance, prefix string) Command {
 	}
 }
 
-func (r Ros) RoutingBgpAggregate(instance, prefix string) (map[string]string, error) {
+func (r *Ros) RoutingBgpAggregate(instance, prefix string) (map[string]string, error) {
 	return r.First(routingBgpAggregate(instance, prefix))
 }
 
@@ -41,6 +41,6 @@ func setRoutingBgpAggregate(instance, prefix, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingBgpAggregateComment(instance, prefix, comment string) error {
+func (r *Ros) SetRoutingBgpAggregateComment(instance, prefix, comment string) error {
 	return r.Exec(setRoutingBgpAggregate(instance, prefix, "comment", comment))
 }

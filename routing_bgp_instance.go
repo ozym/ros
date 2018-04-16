@@ -8,7 +8,7 @@ func routingBgpInstances() Command {
 	}
 }
 
-func (r Ros) RoutingBgpInstances() ([]map[string]string, error) {
+func (r *Ros) RoutingBgpInstances() ([]map[string]string, error) {
 	return r.List(routingBgpInstances())
 }
 
@@ -23,7 +23,7 @@ func routingBgpInstance(name string) Command {
 	}
 }
 
-func (r Ros) RoutingBgpInstance(name string) (map[string]string, error) {
+func (r *Ros) RoutingBgpInstance(name string) (map[string]string, error) {
 	return r.First(routingBgpInstance(name))
 }
 
@@ -40,10 +40,10 @@ func setRoutingBgpInstance(name, key, value string) Command {
 	}
 }
 
-func (r Ros) SetRoutingBgpInstanceRouterId(name, router_id string) error {
+func (r *Ros) SetRoutingBgpInstanceRouterId(name, router_id string) error {
 	return r.Exec(setRoutingBgpInstance(name, "router-id", router_id))
 }
 
-func (r Ros) SetRoutingBgpInstanceComment(name, comment string) error {
+func (r *Ros) SetRoutingBgpInstanceComment(name, comment string) error {
 	return r.Exec(setRoutingBgpInstance(name, "comment", comment))
 }

@@ -8,7 +8,7 @@ func routingBgpPeers() Command {
 	}
 }
 
-func (r Ros) RoutingBgpPeers() ([]map[string]string, error) {
+func (r *Ros) RoutingBgpPeers() ([]map[string]string, error) {
 	return r.List(routingBgpPeers())
 }
 
@@ -23,7 +23,7 @@ func routingBgpPeer(addr string) Command {
 	}
 }
 
-func (r Ros) RoutingBgpPeer(addr string) (map[string]string, error) {
+func (r *Ros) RoutingBgpPeer(addr string) (map[string]string, error) {
 	return r.First(routingBgpPeer(addr))
 }
 
@@ -39,9 +39,9 @@ func setRoutingBgpPeer(addr, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingBgpPeerComment(addr, comment string) error {
+func (r *Ros) SetRoutingBgpPeerComment(addr, comment string) error {
 	return r.Exec(setRoutingBgpPeer(addr, "comment", comment))
 }
-func (r Ros) SetRoutingBgpPeerName(addr, name string) error {
+func (r *Ros) SetRoutingBgpPeerName(addr, name string) error {
 	return r.Exec(setRoutingBgpPeer(addr, "name", name))
 }

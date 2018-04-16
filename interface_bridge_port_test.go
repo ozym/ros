@@ -11,6 +11,7 @@ func TestInterfaceBridgePort(t *testing.T) {
 		v string
 	}{
 		{interfaceBridgePorts(), `/interface bridge port print detail`},
+		{setInterfaceBridgePort("br", "if", "key", "value"), `/interface bridge port set [find bridge="br" interface="if"] key="value"`},
 	}
 
 	for _, x := range tests {

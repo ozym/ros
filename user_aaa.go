@@ -7,7 +7,7 @@ func userAaa() Command {
 	}
 }
 
-func (r Ros) UserAaa() (map[string]string, error) {
+func (r *Ros) UserAaa() (map[string]string, error) {
 	return r.Values(userAaa())
 }
 
@@ -20,7 +20,7 @@ func setUserAaaUseRadius(enabled bool) Command {
 		},
 	}
 }
-func (r Ros) SetUserAaaUseRadius(enabled bool) error {
+func (r *Ros) SetUserAaaUseRadius(enabled bool) error {
 	return r.Exec(setUserAaaUseRadius(enabled))
 }
 
@@ -33,7 +33,7 @@ func setUserAaaAccounting(enabled bool) Command {
 		},
 	}
 }
-func (r Ros) SetUserAaaAccounting(enabled bool) error {
+func (r *Ros) SetUserAaaAccounting(enabled bool) error {
 	return r.Exec(setUserAaaAccounting(enabled))
 }
 
@@ -46,7 +46,7 @@ func setUserAaaInterimUpdate(update string) Command {
 		},
 	}
 }
-func (r Ros) SetUserAaaInterimUpdate(update string) error {
+func (r *Ros) SetUserAaaInterimUpdate(update string) error {
 	return r.Exec(setUserAaaInterimUpdate(update))
 }
 
@@ -59,7 +59,7 @@ func setUserAaaDefaultGroup(group string) Command {
 		},
 	}
 }
-func (r Ros) SetUserAaaDefaultGroup(group string) error {
+func (r *Ros) SetUserAaaDefaultGroup(group string) error {
 	return r.Exec(setUserAaaDefaultGroup(group))
 }
 
@@ -72,6 +72,6 @@ func setUserAaaExcludeGroups(groups string) Command {
 		},
 	}
 }
-func (r Ros) SetUserAaaExcludeGroups(groups string) error {
+func (r *Ros) SetUserAaaExcludeGroups(groups string) error {
 	return r.Exec(setUserAaaExcludeGroups(groups))
 }

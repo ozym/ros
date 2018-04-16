@@ -8,7 +8,7 @@ func routingOspfInterfaces() Command {
 	}
 }
 
-func (r Ros) RoutingOspfInterfaces() ([]map[string]string, error) {
+func (r *Ros) RoutingOspfInterfaces() ([]map[string]string, error) {
 	return r.List(routingOspfInterfaces())
 }
 
@@ -23,7 +23,7 @@ func routingOspfInterface(iface string) Command {
 	}
 }
 
-func (r Ros) RoutingOspfInterface(iface string) (map[string]string, error) {
+func (r *Ros) RoutingOspfInterface(iface string) (map[string]string, error) {
 	return r.First(routingOspfInterface(iface))
 }
 
@@ -33,15 +33,16 @@ func setRoutingOspfInterface(iface, key, value string) Command {
 		Command: "set",
 		Filter: map[string]string{
 			"interface": iface,
+			"dynamic":   "no",
 		},
 		Params: map[string]string{
 			key: value,
 		},
 	}
 }
-func (r Ros) SetRoutingOspfInterfaceComment(iface, comment string) error {
+func (r *Ros) SetRoutingOspfInterfaceComment(iface, comment string) error {
 	return r.Exec(setRoutingOspfInterface(iface, "comment", comment))
 }
-func (r Ros) SetRoutingOspfInterfaceCost(iface, cost string) error {
+func (r *Ros) SetRoutingOspfInterfaceCost(iface, cost string) error {
 	return r.Exec(setRoutingOspfInterface(iface, "cost", cost))
 }

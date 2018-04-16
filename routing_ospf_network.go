@@ -8,7 +8,7 @@ func routingOspfNetworks() Command {
 	}
 }
 
-func (r Ros) RoutingOspfNetworks() ([]map[string]string, error) {
+func (r *Ros) RoutingOspfNetworks() ([]map[string]string, error) {
 	return r.List(routingOspfNetworks())
 }
 
@@ -23,7 +23,7 @@ func routingOspfNetwork(network string) Command {
 	}
 }
 
-func (r Ros) RoutingOspfNetwork(network string) (map[string]string, error) {
+func (r *Ros) RoutingOspfNetwork(network string) (map[string]string, error) {
 	return r.First(routingOspfNetwork(network))
 }
 
@@ -39,6 +39,6 @@ func setRoutingOspfNetwork(network, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingOspfNetworkComment(network, comment string) error {
+func (r *Ros) SetRoutingOspfNetworkComment(network, comment string) error {
 	return r.Exec(setRoutingOspfNetwork(network, "comment", comment))
 }

@@ -11,7 +11,7 @@ func ipRoutes(static bool) Command {
 	}
 }
 
-func (r Ros) IpRoutes(static bool) ([]map[string]string, error) {
+func (r *Ros) IpRoutes(static bool) ([]map[string]string, error) {
 	return r.List(ipRoutes(static))
 }
 
@@ -26,7 +26,7 @@ func ipRoute(address string) Command {
 	}
 }
 
-func (r Ros) IpRoute(address string) (map[string]string, error) {
+func (r *Ros) IpRoute(address string) (map[string]string, error) {
 	return r.First(ipAddress(address))
 }
 
@@ -43,6 +43,6 @@ func setIpRoute(address, key, value string) Command {
 	}
 }
 
-func (r Ros) SetIpRouteComment(address, comment string) error {
+func (r *Ros) SetIpRouteComment(address, comment string) error {
 	return r.Exec(setIpRoute(address, "comment", comment))
 }

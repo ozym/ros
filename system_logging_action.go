@@ -15,7 +15,7 @@ func systemLoggingAction(name string) Command {
 	}
 }
 
-func (r Ros) SystemLoggingAction(name string) (map[string]string, error) {
+func (r *Ros) SystemLoggingAction(name string) (map[string]string, error) {
 	return r.Values(systemLoggingAction(name))
 }
 
@@ -31,24 +31,24 @@ func setSystemLoggingAction(name, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemLoggingActionTarget(name, target string) error {
+func (r *Ros) SetSystemLoggingActionTarget(name, target string) error {
 	return r.Exec(setSystemLoggingAction(name, "target", target))
 }
-func (r Ros) SetSystemLoggingActionRemote(name, remote string) error {
+func (r *Ros) SetSystemLoggingActionRemote(name, remote string) error {
 	return r.Exec(setSystemLoggingAction(name, "remote", remote))
 }
-func (r Ros) SetSystemLoggingActionRemotePort(name string, port int) error {
+func (r *Ros) SetSystemLoggingActionRemotePort(name string, port int) error {
 	return r.Exec(setSystemLoggingAction(name, "remote-port", strconv.Itoa(port)))
 }
-func (r Ros) SetSystemLoggingActionSrcAddress(name string, address string) error {
+func (r *Ros) SetSystemLoggingActionSrcAddress(name string, address string) error {
 	return r.Exec(setSystemLoggingAction(name, "src-address", address))
 }
-func (r Ros) SetSystemLoggingActionBsdSyslog(name string, bsd bool) error {
+func (r *Ros) SetSystemLoggingActionBsdSyslog(name string, bsd bool) error {
 	return r.Exec(setSystemLoggingAction(name, "bsd-syslog", FormatBool(bsd)))
 }
-func (r Ros) SetSystemLoggingActionSyslogSeverity(name, severity string) error {
+func (r *Ros) SetSystemLoggingActionSyslogSeverity(name, severity string) error {
 	return r.Exec(setSystemLoggingAction(name, "syslog-severity", severity))
 }
-func (r Ros) SetSystemLoggingActionSyslogFacility(name, facility string) error {
+func (r *Ros) SetSystemLoggingActionSyslogFacility(name, facility string) error {
 	return r.Exec(setSystemLoggingAction(name, "syslog-facility", facility))
 }

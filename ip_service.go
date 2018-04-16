@@ -15,7 +15,7 @@ func ipService(name string) Command {
 	}
 }
 
-func (r Ros) IpService(name string) (map[string]string, error) {
+func (r *Ros) IpService(name string) (map[string]string, error) {
 	return r.First(ipService(name))
 }
 
@@ -31,14 +31,14 @@ func setIpService(name, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetIpServiceDisabled(name string, disabled bool) error {
+func (r *Ros) SetIpServiceDisabled(name string, disabled bool) error {
 	return r.Exec(setIpService(name, "disabled", FormatBool(disabled)))
 }
 
-func (r Ros) SetIpServicePort(name string, port int) error {
+func (r *Ros) SetIpServicePort(name string, port int) error {
 	return r.Exec(setIpService(name, "port", strconv.Itoa(port)))
 }
 
-func (r Ros) SetIpServiceAddress(name, address string) error {
+func (r *Ros) SetIpServiceAddress(name, address string) error {
 	return r.Exec(setIpService(name, "address", address))
 }

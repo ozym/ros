@@ -8,7 +8,7 @@ func interfaceBridges() Command {
 	}
 }
 
-func (r Ros) InterfaceBridges() ([]map[string]string, error) {
+func (r *Ros) InterfaceBridges() ([]map[string]string, error) {
 	return r.List(interfaceBridges())
 }
 
@@ -23,7 +23,7 @@ func interfaceBridge(name string) Command {
 	}
 }
 
-func (r Ros) InterfaceBridge(name string) (map[string]string, error) {
+func (r *Ros) InterfaceBridge(name string) (map[string]string, error) {
 	return r.First(interfaceBridge(name))
 }
 
@@ -40,14 +40,14 @@ func setInterfaceBridge(name, key, value string) Command {
 	}
 }
 
-func (r Ros) SetInterfaceBridgeComment(name, comment string) error {
+func (r *Ros) SetInterfaceBridgeComment(name, comment string) error {
 	return r.Exec(setInterfaceBridge(name, "comment", comment))
 }
 
-func (r Ros) SetInterfaceBridgeProtocolMode(name, mode string) error {
+func (r *Ros) SetInterfaceBridgeProtocolMode(name, mode string) error {
 	return r.Exec(setInterfaceBridge(name, "protocol-mode", mode))
 }
 
-func (r Ros) SetInterfaceBridgePriority(name, priority string) error {
+func (r *Ros) SetInterfaceBridgePriority(name, priority string) error {
 	return r.Exec(setInterfaceBridge(name, "priority", priority))
 }

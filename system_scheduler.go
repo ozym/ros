@@ -15,7 +15,7 @@ func systemScheduler(name string) Command {
 	}
 }
 
-func (r Ros) SystemScheduler(name string) (map[string]string, error) {
+func (r *Ros) SystemScheduler(name string) (map[string]string, error) {
 	return r.First(systemScheduler(name))
 }
 
@@ -32,7 +32,7 @@ func addSystemScheduler(name, interval, policy, onevent string) Command {
 	}
 }
 
-func (r Ros) AddSystemScheduler(name, interval, policy, onevent string) error {
+func (r *Ros) AddSystemScheduler(name, interval, policy, onevent string) error {
 	return r.Exec(addSystemScheduler(name, interval, policy, onevent))
 }
 
@@ -46,7 +46,7 @@ func removeSystemScheduler(name string) Command {
 	}
 }
 
-func (r Ros) RemoveSystemScheduler(name string) error {
+func (r *Ros) RemoveSystemScheduler(name string) error {
 	return r.Exec(removeSystemScheduler(name))
 }
 
@@ -63,24 +63,24 @@ func setSystemScheduler(name, key, value string) Command {
 	}
 }
 
-func (r Ros) SetSystemSchedulerInterval(name, interval string) error {
+func (r *Ros) SetSystemSchedulerInterval(name, interval string) error {
 	return r.Exec(setSystemScheduler(name, "interval", interval))
 }
-func (r Ros) SetSystemSchedulerPolicy(name, policy string) error {
+func (r *Ros) SetSystemSchedulerPolicy(name, policy string) error {
 	return r.Exec(setSystemScheduler(name, "policy", policy))
 }
-func (r Ros) SetSystemSchedulerComment(name, comment string) error {
+func (r *Ros) SetSystemSchedulerComment(name, comment string) error {
 	return r.Exec(setSystemScheduler(name, "comment", comment))
 }
-func (r Ros) SetSystemSchedulerOnEvent(name, onevent string) error {
+func (r *Ros) SetSystemSchedulerOnEvent(name, onevent string) error {
 	return r.Exec(setSystemScheduler(name, "on-event", onevent))
 }
-func (r Ros) SetSystemSchedulerStartDate(name, startdate string) error {
+func (r *Ros) SetSystemSchedulerStartDate(name, startdate string) error {
 	return r.Exec(setSystemScheduler(name, "start_date", startdate))
 }
-func (r Ros) SetSystemSchedulerStartTime(name, starttime string) error {
+func (r *Ros) SetSystemSchedulerStartTime(name, starttime string) error {
 	return r.Exec(setSystemScheduler(name, "start_time", starttime))
 }
-func (r Ros) SetSystemSchedulerStartup(name string, startup bool) error {
+func (r *Ros) SetSystemSchedulerStartup(name string, startup bool) error {
 	return r.Exec(setSystemScheduler(name, "startup", FormatBool(startup)))
 }

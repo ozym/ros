@@ -7,6 +7,6 @@ func systemResource() Command {
 	}
 }
 
-func (r Ros) SystemResource() (map[string]string, error) {
+func (r *Ros) SystemResource() (map[string]string, error) {
 	return r.Values(systemResource())
 }

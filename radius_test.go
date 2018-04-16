@@ -10,11 +10,12 @@ func TestRadius(t *testing.T) {
 		c Command
 		v string
 	}{
-		{radius(), `/radius print`},
-		{setRadiusAddress("192.168.0.1"), `/radius set address="192.168.0.1"`},
-		{setRadiusSecret("secret"), `/radius set secret="secret"`},
-		{setRadiusService("login"), `/radius set service="login"`},
-		{setRadiusSrcAddress("192.168.0.1"), `/radius set src-address="192.168.0.1"`},
+		{radius("login"), `/radius print detail where service="login"`},
+		{addRadius("login"), `:if ([:len [/radius find service="login"]] = 0) do={/radius add service="login"}`},
+		{setRadiusAddress("login", "192.168.0.1"), `/radius set [find service="login"] address="192.168.0.1"`},
+		{setRadiusSecret("login", "secret"), `/radius set [find service="login"] secret="secret"`},
+		{setRadiusSrcAddress("login", "192.168.0.1"), `/radius set [find service="login"] src-address="192.168.0.1"`},
+		{setRadiusTimeout("login", "100ms"), `/radius set [find service="login"] timeout="100ms"`},
 	}
 
 	for _, x := range tests {

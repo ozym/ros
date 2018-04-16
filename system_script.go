@@ -15,7 +15,7 @@ func systemScript(name string) Command {
 	}
 }
 
-func (r Ros) SystemScript(name string) (map[string]string, error) {
+func (r *Ros) SystemScript(name string) (map[string]string, error) {
 	return r.First(systemScript(name))
 }
 
@@ -32,7 +32,7 @@ func addSystemScript(name, policy, source string) Command {
 		},
 	}
 }
-func (r Ros) AddSystemScript(name, policy, source string) error {
+func (r *Ros) AddSystemScript(name, policy, source string) error {
 	return r.Exec(addSystemScript(name, policy, source))
 }
 
@@ -45,7 +45,7 @@ func removeSystemScript(name string) Command {
 		},
 	}
 }
-func (r Ros) RemoveSystemScript(name string) error {
+func (r *Ros) RemoveSystemScript(name string) error {
 	return r.Exec(removeSystemScript(name))
 }
 
@@ -61,7 +61,7 @@ func setSystemScriptPolicy(name, policy string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemScriptPolicy(name, policy string) error {
+func (r *Ros) SetSystemScriptPolicy(name, policy string) error {
 	return r.Exec(setSystemScriptPolicy(name, policy))
 }
 
@@ -77,6 +77,6 @@ func setSystemScriptSource(name, source string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemScriptSource(name, source string) error {
+func (r *Ros) SetSystemScriptSource(name, source string) error {
 	return r.Exec(setSystemScriptSource(name, source))
 }

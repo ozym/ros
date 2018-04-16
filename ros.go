@@ -1,14 +1,16 @@
 package ros
 
 import (
-	"fmt"
 	"net"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
+	//TODO: remove after firware update
 	"github.com/ScriptRock/crypto/ssh"
+	//TODO: add after firware update
+	//"golang.org/x/crypto/ssh"
 )
 
 const (
@@ -25,8 +27,10 @@ type Ros struct {
 	hostname string
 	port     int
 
-	major int
-	minor int
+	major       int
+	minor       int
+	routerboard bool
+	once        sync.Once
 
 	mu  sync.Mutex
 	err error
@@ -86,10 +90,12 @@ func NewRos(hostname string, options ...func(*Ros) error) (*Ros, error) {
 			Auth: []ssh.AuthMethod{
 				ssh.Password(DefaultPassword),
 			},
+			//TODO: remove after firware update
 			Config: ssh.Config{
 				Ciphers: ssh.AllSupportedCiphers(),
 			},
-			Timeout: DefaultTimeout,
+			Timeout:         DefaultTimeout,
+			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		},
 
 		hostname: host,
@@ -129,45 +135,75 @@ func (r *Ros) Connect() error {
 	return nil
 }
 
+func (r *Ros) Close() error {
+	if r.err != nil {
+		return r.err
+	}
+	if r.client == nil {
+		return nil
+	}
+	if err := r.client.Close(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (r *Ros) Version() error {
 
 	if r.err != nil {
 		return r.err
 	}
 
-	if r.major == 0 {
+	r.once.Do(func() {
 		res, err := r.SystemResource()
 		if err != nil {
 			r.err = err
-
-			return err
+			return
 		}
-		if _, ok := res["version"]; !ok {
-			return fmt.Errorf("no version found")
+		if v, ok := res["version"]; ok {
+			major, minor := RouterOsVersion(v)
+
+			r.major, r.minor = major, minor
 		}
+		if b, ok := res["routerboard"]; ok {
+			r.routerboard = ParseBool(b)
+		}
+	})
 
-		major, minor := RouterOsVersion(res["version"])
-
-		r.major, r.minor = major, minor
-	}
-
-	return nil
-}
-
-func (r Ros) Id() string {
-	return r.hostname
-}
-
-func (r Ros) Error() error {
 	return r.err
 }
 
-func (r Ros) Major() int {
+func (r *Ros) Id() string {
+	return r.hostname
+}
+
+func (r *Ros) Error() error {
+	return r.err
+}
+
+func (r *Ros) Major() int {
 	return r.major
 }
 
-func (r Ros) Minor() int {
+func (r *Ros) Minor() int {
 	return r.minor
+}
+
+func (r *Ros) AtLeast(major, minor int) bool {
+	switch {
+	case r.Major() < major:
+		return false
+	case r.Major() > major:
+		return true
+	case r.Minor() < minor:
+		return false
+	default:
+		return true
+	}
+}
+func (r *Ros) Routerboard() bool {
+	return r.routerboard
 }
 
 func FormatBool(b bool) string {
@@ -184,11 +220,11 @@ func ParseBool(x string) bool {
 	return false
 }
 
-func (r Ros) Parse(c Command) (string, error) {
+func (r *Ros) Parse(c Command) (string, error) {
 	return c.Parse()
 }
 
-func (r Ros) Run(c Command) ([]string, error) {
+func (r *Ros) Run(c Command) ([]string, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -210,7 +246,7 @@ func (r Ros) Run(c Command) ([]string, error) {
 	return res, nil
 }
 
-func (r Ros) Exec(c Command) error {
+func (r *Ros) Exec(c Command) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -232,7 +268,7 @@ func (r Ros) Exec(c Command) error {
 	return nil
 }
 
-func (r Ros) Values(c Command) (map[string]string, error) {
+func (r *Ros) Values(c Command) (map[string]string, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -253,7 +289,7 @@ func (r Ros) Values(c Command) (map[string]string, error) {
 	return res, nil
 }
 
-func (r Ros) List(c Command) ([]map[string]string, error) {
+func (r *Ros) List(c Command) ([]map[string]string, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -275,7 +311,29 @@ func (r Ros) List(c Command) ([]map[string]string, error) {
 	return res, nil
 }
 
-func (r Ros) First(c Command) (map[string]string, error) {
+func (r *Ros) UnnumberedList(c Command, header int) ([]map[string]string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if r.err != nil {
+		return nil, r.err
+	}
+
+	if err := r.Connect(); err != nil {
+		return nil, err
+	}
+
+	res, err := c.UnnumberedList(r.client, header)
+	if err != nil {
+		r.err = err
+
+		return res, err
+	}
+
+	return res, nil
+}
+
+func (r *Ros) First(c Command) (map[string]string, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

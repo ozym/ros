@@ -8,7 +8,7 @@ func ipAddresses() Command {
 	}
 }
 
-func (r Ros) IpAddresses() ([]map[string]string, error) {
+func (r *Ros) IpAddresses() ([]map[string]string, error) {
 	return r.List(ipAddresses())
 }
 
@@ -23,7 +23,7 @@ func ipAddress(address string) Command {
 	}
 }
 
-func (r Ros) IpAddress(address string) (map[string]string, error) {
+func (r *Ros) IpAddress(address string) (map[string]string, error) {
 	return r.First(ipAddress(address))
 }
 
@@ -40,6 +40,6 @@ func setIpAddress(address, key, value string) Command {
 	}
 }
 
-func (r Ros) SetIpAddressComment(address, comment string) error {
+func (r *Ros) SetIpAddressComment(address, comment string) error {
 	return r.Exec(setIpAddress(address, "comment", comment))
 }

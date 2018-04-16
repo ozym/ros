@@ -8,7 +8,7 @@ func routingOspfInstances() Command {
 	}
 }
 
-func (r Ros) RoutingOspfInstances() ([]map[string]string, error) {
+func (r *Ros) RoutingOspfInstances() ([]map[string]string, error) {
 	return r.List(routingOspfInstances())
 }
 
@@ -23,7 +23,7 @@ func routingOspfInstance(name string) Command {
 	}
 }
 
-func (r Ros) RoutingOspfInstance(name string) (map[string]string, error) {
+func (r *Ros) RoutingOspfInstance(name string) (map[string]string, error) {
 	return r.First(routingOspfInstance(name))
 }
 
@@ -39,9 +39,9 @@ func setRoutingOspfInstance(name, key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetRoutingOspfInstanceRouterId(name, router_id string) error {
+func (r *Ros) SetRoutingOspfInstanceRouterId(name, router_id string) error {
 	return r.Exec(setRoutingOspfInstance(name, "router-id", router_id))
 }
-func (r Ros) SetRoutingOspfInstanceComment(name, comment string) error {
+func (r *Ros) SetRoutingOspfInstanceComment(name, comment string) error {
 	return r.Exec(setRoutingOspfInstance(name, "comment", comment))
 }

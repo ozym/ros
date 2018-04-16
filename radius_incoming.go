@@ -11,7 +11,7 @@ func radiusIncoming() Command {
 	}
 }
 
-func (r Ros) RadiusIncoming() (map[string]string, error) {
+func (r *Ros) RadiusIncoming() (map[string]string, error) {
 	return r.Values(radiusIncoming())
 }
 
@@ -25,7 +25,7 @@ func setRadiusIncomingAccept(accept bool) Command {
 	}
 }
 
-func (r Ros) SetRadiusIncomingAccept(accept bool) error {
+func (r *Ros) SetRadiusIncomingAccept(accept bool) error {
 	return r.Exec(setRadiusIncomingAccept(accept))
 }
 
@@ -38,6 +38,6 @@ func setRadiusIncomingPort(port string) Command {
 		},
 	}
 }
-func (r Ros) SetRadiusIncomingPort(port int) error {
+func (r *Ros) SetRadiusIncomingPort(port int) error {
 	return r.Exec(setRadiusIncomingPort(strconv.Itoa(port)))
 }

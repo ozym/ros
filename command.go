@@ -4,10 +4,14 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"strconv"
 	"strings"
 	"text/template"
 
+	//TODO: remove after firware update
 	"github.com/ScriptRock/crypto/ssh"
+	//TODO: add after firware update
+	//"golang.org/x/crypto/ssh"
 )
 
 // Comand represents a basic CLI request.
@@ -23,13 +27,15 @@ type Command struct {
 }
 
 var setTmpl = template.Must(template.New("set").Parse(
-	`{{.Path}} set{{if .Filter}} [find{{range $k,$v := .Filter}} {{$k}}="{{$v}}"{{end}}]{{end}}{{if .UParam}} {{.UParam}}{{end}}{{range $k,$v := .Params}} {{$k}}="{{$v}}"{{end}}{{if .Flags}}{{range $k,$v := .Flags}} {{if not $v}}!{{end}}{{$k}}{{end}}{{end}}`))
+	`{{.Path}} set{{if .Filter}} [find{{range $k,$v := .Filter}}{{if ne "" $v}} {{$k}}="{{$v}}"{{end}}{{end}}{{range $k,$v := .Filter}}{{if eq "" $v}} {{$k}}{{end}}{{end}}]{{end}}{{if .UParam}} {{.UParam}}{{end}}{{range $k,$v := .Params}} {{$k}}="{{$v}}"{{end}}{{if .Flags}}{{range $k,$v := .Flags}} {{if not $v}}!{{end}}{{$k}}{{end}}{{end}}`))
 var removeTmpl = template.Must(template.New("remove").Parse(
-	`{{.Path}} remove{{if .Filter}} [find{{range $k,$v := .Filter}} {{$k}}="{{$v}}"{{end}}]{{end}}{{if .UParam}} {{.UParam}}{{end}}`))
+	`{{.Path}} remove{{if .Filter}} [find{{range $k,$v := .Filter}} {{$k}}="{{$v}}"{{end}}{{range $k,$v := .Flags}} {{if not $v}}!{{end}}{{$k}}{{end}}]{{end}}{{if .UParam}} {{.UParam}}{{end}}`))
 var addTmpl = template.Must(template.New("add").Parse(
 	`{{if .Params}}:if ([:len [{{.Path}} find{{range $k,$v := .Params}} {{$k}}="{{$v}}"{{end}}]] = 0) do={{"{"}}{{end}}{{.Path}} add{{range $k,$v := .Params}} {{$k}}="{{$v}}"{{end}}{{range $k,$v := .Extra}} {{$k}}="{{$v}}"{{end}}{{if .Params}}{{"}"}}{{end}}`))
 var printTmpl = template.Must(template.New("print").Parse(
 	`{{.Path}} print{{if .Detail}} detail{{end}}{{if or .Filter .Flags}} where{{range $k,$v := .Filter}} {{$k}}="{{$v}}"{{end}}{{range $k,$v := .Flags}} {{if not $v}}!{{end}}{{$k}}{{end}}{{end}}`))
+var exportTmpl = template.Must(template.New("export").Parse(
+	`{{.Path}} export{{range $k,$v := .Filter}} {{$k}}="{{$v}}"{{end}}{{range $k,$v := .Flags}}{{if $v}} {{$k}}{{end}}{{end}}`))
 
 func (c Command) Parse() (string, error) {
 	var res bytes.Buffer
@@ -50,6 +56,11 @@ func (c Command) Parse() (string, error) {
 		if err := printTmpl.Execute(&res, c); err != nil {
 			return "", err
 		}
+	case "export":
+		if err := exportTmpl.Execute(&res, c); err != nil {
+			return "", err
+		}
+
 	default:
 		return "", fmt.Errorf("Unknown type: %s", c.Command)
 	}
@@ -81,6 +92,9 @@ func (c Command) Run(client *ssh.Client) ([]string, error) {
 		return nil, err
 	}
 	for scanner.Scan() {
+		if strings.HasPrefix(scanner.Text(), "#") {
+			continue
+		}
 		lines = append(lines, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
@@ -91,9 +105,17 @@ func (c Command) Run(client *ssh.Client) ([]string, error) {
 }
 
 func (c Command) Exec(client *ssh.Client) error {
-	_, err := c.Run(client)
+	res, err := c.Run(client)
 	if err != nil {
 		return err
+	}
+	if len(res) > 0 {
+		p, err := c.Parse()
+		if err != nil {
+			return err
+		}
+
+		return fmt.Errorf("error: '%s': %s\n", p, strings.Join(res, ";"))
 	}
 	return nil
 }
@@ -119,7 +141,23 @@ func (c Command) List(client *ssh.Client) ([]map[string]string, error) {
 	}
 	var trimmed []string
 	for _, l := range lines {
-		trimmed = append(trimmed, strings.TrimSpace(l))
+		parts := strings.Fields(strings.TrimSpace(l))
+
+		var fields []string
+		for i := 0; i < len(parts); i++ {
+			switch {
+			// causes octal decoding errors?
+			case strings.HasPrefix(parts[i], "last-link-up-time="):
+				i++
+			// causes octal decoding errors?
+			case strings.HasPrefix(parts[i], "last-link-down-time="):
+				i++
+			default:
+				fields = append(fields, parts[i])
+			}
+		}
+
+		trimmed = append(trimmed, strings.Join(fields, " "))
 	}
 
 	list, err := ScanNumberedItemList(strings.Join(trimmed, "\n"))
@@ -136,4 +174,41 @@ func (c Command) First(client *ssh.Client) (map[string]string, error) {
 		return nil, err
 	}
 	return list[0], nil
+}
+
+func (c Command) UnnumberedList(client *ssh.Client, offset int) ([]map[string]string, error) {
+	lines, err := c.Run(client)
+	if err != nil || !(len(lines) > 0) {
+		return nil, err
+	}
+	var trimmed []string
+	for n, l := range lines {
+		parts := strings.Fields(strings.TrimSpace(l))
+
+		var fields []string
+		if !(n < offset) {
+			fields = append(fields, strconv.Itoa(n-offset))
+		}
+		for i := 0; i < len(parts); i++ {
+			switch {
+			// causes octal decoding errors?
+			case strings.HasPrefix(parts[i], "last-link-up-time="):
+				i++
+			// causes octal decoding errors?
+			case strings.HasPrefix(parts[i], "last-link-down-time="):
+				i++
+			default:
+				fields = append(fields, parts[i])
+			}
+		}
+
+		trimmed = append(trimmed, strings.Join(fields, " "))
+	}
+
+	list, err := ScanNumberedItemList(strings.Join(trimmed, "\n"))
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
 }

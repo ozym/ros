@@ -17,7 +17,7 @@ func TestNumbered(t *testing.T) {
 		  `,
 
 			[]map[string]string{
-				map[string]string{
+				{
 					"number":           "0",
 					"address":          "10.242.0.41/28",
 					"network":          "10.242.0.32",
@@ -37,7 +37,7 @@ func TestNumbered(t *testing.T) {
 			  1   name="lk2hillroad-climie_down" owner="admin+cte" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive run-count=0 source={/ip address set [find address="10.54.242.2/28" ] disabled=yes}
 			  `,
 			[]map[string]string{
-				map[string]string{
+				{
 					"number":    "0",
 					"name":      "lk2hillroad-climie_up",
 					"owner":     "admin+cte",
@@ -47,7 +47,7 @@ func TestNumbered(t *testing.T) {
 					"comment":   "",
 					"invalid":   "no",
 				},
-				map[string]string{
+				{
 					"number":    "1",
 					"name":      "lk2hillroad-climie_down",
 					"owner":     "admin+cte",
@@ -65,7 +65,7 @@ func TestNumbered(t *testing.T) {
 			      host=10.242.0.17 timeout=998ms interval=10s since=nov/13/2016 11:37:06 status=up up-script=lk2cotton-climie_up down-script=lk2cotton-climie_down
 			`,
 			[]map[string]string{
-				map[string]string{
+				{
 					"number":      "0",
 					"comment":     "Monitor Link Between Cotton and Climie",
 					"host":        "10.242.0.17",
@@ -85,7 +85,7 @@ func TestNumbered(t *testing.T) {
 			      run-count=6 source={/ip address set [find address="10.54.242.1/28" ] disabled=no}
 			`,
 			[]map[string]string{
-				map[string]string{
+				{
 					"number":       "0",
 					"name":         "lk2cotton-climie_up",
 					"owner":        "admin+cte",
@@ -109,7 +109,7 @@ func TestNumbered(t *testing.T) {
 `,
 
 			[]map[string]string{
-				map[string]string{
+				{
 					"number":       "0",
 					"name":         "lk2cotton-climie_up",
 					"owner":        "admin+cte",
@@ -134,7 +134,7 @@ func TestNumbered(t *testing.T) {
 
 `,
 			[]map[string]string{
-				map[string]string{
+				{
 					"comment":             "",
 					"number":              "0",
 					"dynamic":             "no",
@@ -154,7 +154,7 @@ func TestNumbered(t *testing.T) {
 					"last-link-up-time":   "nov/18/2016 02:23:19",
 					"link-downs":          "10",
 				},
-				map[string]string{
+				{
 					"comment":             "",
 					"number":              "1",
 					"dynamic":             "no",
@@ -174,7 +174,7 @@ func TestNumbered(t *testing.T) {
 					"last-link-up-time":   "nov/18/2016 04:03:49",
 					"link-downs":          "3",
 				},
-				map[string]string{
+				{
 					"comment":           "",
 					"number":            "55",
 					"dynamic":           "no",
@@ -197,7 +197,7 @@ func TestNumbered(t *testing.T) {
 		 0   address=192.168.80.114/28 network=192.168.80.112 interface=switch actual-interface=switch
 		 `,
 			[]map[string]string{
-				map[string]string{
+				{
 					"comment":          "",
 					"invalid":          "no",
 					"dynamic":          "no",
@@ -216,7 +216,7 @@ func TestNumbered(t *testing.T) {
       metric-other-ospf=auto in-filter=ospf-in out-filter=ospf-out
 `,
 			[]map[string]string{
-				map[string]string{
+				{
 					"number":                  "0",
 					"comment":                 "",
 					"name":                    "default",
@@ -248,7 +248,7 @@ func TestNumbered(t *testing.T) {
 		   2 A S  dst-address=161.65.63.1/32 gateway=192.168.1.254 gateway-status=192.168.1.254 reachable via  ether5 distance=1 scope=30 target-scope=10
 `,
 			[]map[string]string{
-				map[string]string{
+				{
 					"number":         "0",
 					"comment":        "",
 					"active":         "yes",
@@ -270,7 +270,7 @@ func TestNumbered(t *testing.T) {
 					"scope":          "30",
 					"target-scope":   "10",
 				},
-				map[string]string{
+				{
 					"number":         "1",
 					"comment":        "",
 					"active":         "yes",
@@ -292,7 +292,7 @@ func TestNumbered(t *testing.T) {
 					"scope":          "30",
 					"target-scope":   "10",
 				},
-				map[string]string{
+				{
 					"number":         "2",
 					"comment":        "",
 					"active":         "yes",
@@ -386,7 +386,7 @@ func TestNumbered(t *testing.T) {
 		       }
 		`,
 			[]map[string]string{
-				map[string]string{
+				{
 					"number":    "0",
 					"name":      "ospf-restart",
 					"owner":     "admin",
@@ -464,6 +464,130 @@ func TestNumbered(t *testing.T) {
 				},
 			},
 		},
+		{
+			`Flags: X - disabled, * - default
+			 0  * interface=all
+			`,
+			[]map[string]string{
+				{
+					"number":    "0",
+					"default":   "yes",
+					"disabled":  "no",
+					"interface": "all",
+					"comment":   "",
+				},
+			},
+		},
+		{
+			`Flags: X - disabled, * - default
+			 0 X* interface=all
+			`,
+			[]map[string]string{
+				{
+					"number":    "0",
+					"default":   "yes",
+					"disabled":  "yes",
+					"interface": "all",
+					"comment":   "",
+				},
+			},
+		},
+		{
+			` 0 interface=ether1 address=10.236.0.81 address4=10.236.0.81 mac-address=00:0C:42:EB:5E:54 identity="wanrt-it05avl" platform="MikroTik" version="6.40.5 (stable)" unpack=none age=28s uptime=10w2d20h42m32s
+   software-id="PD8V-GGMC" board="RB1100AH" interface-name="ether8" system-description="MikroTik RouterOS 6.40.5 (stable) RB1100AH" system-caps=bridge,router system-caps-enabled=bridge,router
+
+ 1 interface=ether2 address=10.240.0.30 address4=10.240.0.30 mac-address=4C:5E:0C:60:F9:23 identity="wanrt1-cottonbuildingvuw" platform="MikroTik" version="6.35.1 (stable)" unpack=none age=40s
+   uptime=62w2d20h27m27s software-id="LRZA-SSJI" board="RB2011UiAS" ipv6=no interface-name="ether2" system-caps="" system-caps-enabled=""
+
+ 2 interface=ether4 address=10.239.0.20 address4=10.239.0.20 mac-address=4C:5E:0C:41:3C:80 identity="rf2hillroad-soundstage" platform="MikroTik" version="6.36 (stable)" unpack=none age=5s
+   uptime=41w2d22h53m54s software-id="3RXV-YCE2" board="RB Metal 5SHPn" ipv6=no interface-name="bridge1" system-caps="" system-caps-enabled=""
+
+ 3 interface=ether4 address=10.239.0.25 address4=10.239.0.25 mac-address=D4:CA:6D:A2:36:61 identity="rf2soundstage-hillroad" platform="MikroTik" version="6.36 (stable)" unpack=none age=23s
+   uptime=1w3d17h33m1s software-id="L2WP-FCDH" board="RB912UAG-5HPnD" ipv6=no interface-name="bridge1" system-caps="" system-caps-enabled=""
+`,
+			[]map[string]string{
+				{
+					"address":             "10.236.0.81",
+					"version":             "6.40.5 (stable)",
+					"address4":            "10.236.0.81",
+					"unpack":              "none",
+					"uptime":              "10w2d20h42m32s",
+					"comment":             "",
+					"software-id":         "PD8V-GGMC",
+					"system-description":  "MikroTik RouterOS 6.40.5 (stable) RB1100AH",
+					"system-caps-enabled": "bridge,router",
+					"interface-name":      "ether8",
+					"number":              "0",
+					"board":               "RB1100AH",
+					"interface":           "ether1",
+					"mac-address":         "00:0C:42:EB:5E:54",
+					"platform":            "MikroTik",
+					"system-caps":         "bridge,router",
+					"age":                 "28s",
+					"identity":            "wanrt-it05avl",
+				},
+				{
+					"interface-name":      "ether2",
+					"platform":            "MikroTik",
+					"unpack":              "none",
+					"uptime":              "62w2d20h27m27s",
+					"ipv6":                "no",
+					"identity":            "wanrt1-cottonbuildingvuw",
+					"software-id":         "LRZA-SSJI",
+					"comment":             "",
+					"board":               "RB2011UiAS",
+					"version":             "6.35.1 (stable)",
+					"system-caps":         "",
+					"age":                 "40s",
+					"mac-address":         "4C:5E:0C:60:F9:23",
+					"number":              "1",
+					"address":             "10.240.0.30",
+					"system-caps-enabled": "",
+					"interface":           "ether2",
+					"address4":            "10.240.0.30",
+				},
+				{
+					"mac-address":         "4C:5E:0C:41:3C:80",
+					"identity":            "rf2hillroad-soundstage",
+					"comment":             "",
+					"software-id":         "3RXV-YCE2",
+					"interface-name":      "bridge1",
+					"age":                 "5s",
+					"address4":            "10.239.0.20",
+					"uptime":              "41w2d22h53m54s",
+					"system-caps-enabled": "",
+					"interface":           "ether4",
+					"number":              "2",
+					"version":             "6.36 (stable)",
+					"board":               "RB Metal 5SHPn",
+					"platform":            "MikroTik",
+					"unpack":              "none",
+					"ipv6":                "no",
+					"system-caps":         "",
+					"address":             "10.239.0.20",
+				},
+				{
+					"number":              "3",
+					"mac-address":         "D4:CA:6D:A2:36:61",
+					"version":             "6.36 (stable)",
+					"identity":            "rf2soundstage-hillroad",
+					"uptime":              "1w3d17h33m1s",
+					"age":                 "23s",
+					"ipv6":                "no",
+					"unpack":              "none",
+					"interface-name":      "bridge1",
+					"address":             "10.239.0.25",
+					"comment":             "",
+					"system-caps-enabled": "",
+					"platform":            "MikroTik",
+					"board":               "RB912UAG-5HPnD",
+					"software-id":         "L2WP-FCDH",
+					"system-caps":         "",
+					"interface":           "ether4",
+					"address4":            "10.239.0.25",
+				},
+			},
+		},
 	}
 
 	for _, test := range tests {
@@ -474,12 +598,12 @@ func TestNumbered(t *testing.T) {
 
 		for i := 0; i < len(test.m) && i < len(m); i++ {
 			if !reflect.DeepEqual(test.m[i], m[i]) {
-				for k, _ := range test.m[i] {
+				for k := range test.m[i] {
 					if _, ok := m[i][k]; !ok {
 						t.Errorf("extra: %s", k)
 					}
 				}
-				for k, _ := range m[i] {
+				for k := range m[i] {
 					if _, ok := test.m[i][k]; !ok {
 						t.Errorf("missing: %s", k)
 					}

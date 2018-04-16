@@ -11,7 +11,7 @@ func toolNetwatch(host string) Command {
 	}
 }
 
-func (r Ros) ToolNetwatch(host string) (map[string]string, error) {
+func (r *Ros) ToolNetwatch(host string) (map[string]string, error) {
 	return r.First(toolNetwatch(host))
 }
 
@@ -29,7 +29,7 @@ func addToolNetwatch(host, up_script, down_script, interval, timeout string, dis
 		},
 	}
 }
-func (r Ros) AddToolNetwatch(host, up_script, down_script, interval, timeout string, disabled bool) error {
+func (r *Ros) AddToolNetwatch(host, up_script, down_script, interval, timeout string, disabled bool) error {
 	return r.Exec(addToolNetwatch(host, up_script, down_script, interval, timeout, disabled))
 }
 
@@ -42,7 +42,7 @@ func removeToolNetwatch(host string) Command {
 		},
 	}
 }
-func (r Ros) RemoveToolNetwatch(host string) error {
+func (r *Ros) RemoveToolNetwatch(host string) error {
 	return r.Exec(removeToolNetwatch(host))
 }
 
@@ -58,7 +58,7 @@ func setToolNetwatchUpScript(host, up_script string) Command {
 		},
 	}
 }
-func (r Ros) SetToolNetwatchUpScript(host, up_script string) error {
+func (r *Ros) SetToolNetwatchUpScript(host, up_script string) error {
 	return r.Exec(setToolNetwatchUpScript(host, up_script))
 }
 
@@ -74,7 +74,7 @@ func setToolNetwatchDownScript(host, down_script string) Command {
 		},
 	}
 }
-func (r Ros) SetToolNetwatchDownScript(host, down_script string) error {
+func (r *Ros) SetToolNetwatchDownScript(host, down_script string) error {
 	return r.Exec(setToolNetwatchUpScript(host, down_script))
 }
 
@@ -90,7 +90,7 @@ func setToolNetwatchInterval(host, interval string) Command {
 		},
 	}
 }
-func (r Ros) SetToolNetwatchInterval(host, interval string) error {
+func (r *Ros) SetToolNetwatchInterval(host, interval string) error {
 	return r.Exec(setToolNetwatchInterval(host, interval))
 }
 
@@ -106,7 +106,7 @@ func setToolNetwatchTimeout(host, timeout string) Command {
 		},
 	}
 }
-func (r Ros) SetToolNetwatchTimeout(host, timeout string) error {
+func (r *Ros) SetToolNetwatchTimeout(host, timeout string) error {
 	return r.Exec(setToolNetwatchTimeout(host, timeout))
 }
 
@@ -122,7 +122,7 @@ func setToolNetwatchDisabled(host string, disabled bool) Command {
 		},
 	}
 }
-func (r Ros) SetToolNetwatchDisabled(host string, disabled bool) error {
+func (r *Ros) SetToolNetwatchDisabled(host string, disabled bool) error {
 	return r.Exec(setToolNetwatchDisabled(host, disabled))
 }
 
@@ -138,6 +138,6 @@ func setToolNetwatchComment(host, comment string) Command {
 		},
 	}
 }
-func (r Ros) SetToolNetwatchComment(host, comment string) error {
+func (r *Ros) SetToolNetwatchComment(host, comment string) error {
 	return r.Exec(setToolNetwatchComment(host, comment))
 }

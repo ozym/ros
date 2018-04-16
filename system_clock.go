@@ -7,7 +7,7 @@ func systemClock() Command {
 	}
 }
 
-func (r Ros) SystemClock() (map[string]string, error) {
+func (r *Ros) SystemClock() (map[string]string, error) {
 	return r.Values(systemClock())
 }
 
@@ -20,7 +20,7 @@ func setSystemClockTimeZoneName(zone string) Command {
 		},
 	}
 }
-func (r Ros) SetSystemClockTimeZoneName(zone string) error {
+func (r *Ros) SetSystemClockTimeZoneName(zone string) error {
 	return r.Exec(setSystemClockTimeZoneName(zone))
 }
 func setSystemClockTimeZoneAutodetect(auto bool) Command {
@@ -32,6 +32,6 @@ func setSystemClockTimeZoneAutodetect(auto bool) Command {
 		},
 	}
 }
-func (r Ros) SetSystemClockTimeZoneAutodetect(auto bool) error {
+func (r *Ros) SetSystemClockTimeZoneAutodetect(auto bool) error {
 	return r.Exec(setSystemClockTimeZoneAutodetect(auto))
 }

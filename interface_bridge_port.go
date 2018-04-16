@@ -8,7 +8,7 @@ func interfaceBridgePorts() Command {
 	}
 }
 
-func (r Ros) InterfaceBridgePorts() ([]map[string]string, error) {
+func (r *Ros) InterfaceBridgePorts() ([]map[string]string, error) {
 	return r.List(interfaceBridgePorts())
 }
 
@@ -24,13 +24,13 @@ func interfaceBridgePort(bridge, iface string) Command {
 	}
 }
 
-func (r Ros) InterfaceBridgePort(bridge, iface string) (map[string]string, error) {
+func (r *Ros) InterfaceBridgePort(bridge, iface string) (map[string]string, error) {
 	return r.First(interfaceBridgePort(bridge, iface))
 }
 
 func setInterfaceBridgePort(bridge, iface, key, value string) Command {
 	return Command{
-		Path:    "/interface bridge",
+		Path:    "/interface bridge port",
 		Command: "set",
 		Filter: map[string]string{
 			"bridge":    bridge,
@@ -42,6 +42,6 @@ func setInterfaceBridgePort(bridge, iface, key, value string) Command {
 	}
 }
 
-func (r Ros) SetInterfaceBridgePortComment(bridge, iface, comment string) error {
+func (r *Ros) SetInterfaceBridgePortComment(bridge, iface, comment string) error {
 	return r.Exec(setInterfaceBridgePort(bridge, iface, "comment", comment))
 }

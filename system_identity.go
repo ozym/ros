@@ -7,7 +7,7 @@ func systemIdentity() Command {
 	}
 }
 
-func (r Ros) SystemIdentity() (map[string]string, error) {
+func (r *Ros) SystemIdentity() (map[string]string, error) {
 	return r.Values(systemIdentity())
 }
 
@@ -21,6 +21,6 @@ func setSystemIdentityName(name string) Command {
 	}
 }
 
-func (r Ros) SetSystemIdentityName(name string) error {
+func (r *Ros) SetSystemIdentityName(name string) error {
 	return r.Exec(setSystemIdentityName(name))
 }

@@ -7,7 +7,7 @@ func systemNote() Command {
 	}
 }
 
-func (r Ros) SystemNote() (map[string]string, error) {
+func (r *Ros) SystemNote() (map[string]string, error) {
 	return r.Values(systemNote())
 }
 
@@ -21,7 +21,7 @@ func setSystemNote(note string) Command {
 	}
 }
 
-func (r Ros) SetSystemNote(note string) error {
+func (r *Ros) SetSystemNote(note string) error {
 	return r.Exec(setSystemNote(note))
 }
 
@@ -34,6 +34,6 @@ func setSystemNoteShowAtLogin(show bool) Command {
 		},
 	}
 }
-func (r Ros) SetSystemNoteShowAtLogin(show bool) error {
+func (r *Ros) SetSystemNoteShowAtLogin(show bool) error {
 	return r.Exec(setSystemNoteShowAtLogin(show))
 }

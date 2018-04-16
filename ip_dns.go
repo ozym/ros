@@ -7,7 +7,7 @@ func ipDns() Command {
 	}
 }
 
-func (r Ros) IpDns() (map[string]string, error) {
+func (r *Ros) IpDns() (map[string]string, error) {
 	return r.Values(ipDns())
 }
 
@@ -20,9 +20,9 @@ func setIpDns(key, value string) Command {
 		},
 	}
 }
-func (r Ros) SetIpDnsServers(servers string) error {
+func (r *Ros) SetIpDnsServers(servers string) error {
 	return r.Exec(setIpDns("servers", servers))
 }
-func (r Ros) SetIpDnsAllowRemoteRequests(allow bool) error {
+func (r *Ros) SetIpDnsAllowRemoteRequests(allow bool) error {
 	return r.Exec(setIpDns("allow-remote-requests", FormatBool(allow)))
 }
