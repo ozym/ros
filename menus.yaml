@@ -1,0 +1,1169 @@
+---
+menus: 
+- path: "/interface"
+  detail: true
+  list: true
+  listonly: true
+- path: "/interface bridge"
+  list: true
+  detail: true
+  setonly: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "protocol-mode"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "priority"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/interface ethernet"
+  list: true
+  detail: true
+  setonly: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "mtu"
+    type: "string"
+    optional: true
+    default: "auto"
+- path: "/interface bridge host"
+  detail: true
+  list: true
+  listonly: true
+  showonly: true
+- path: "/interface bridge port"
+  detail: true
+  list: true
+  params:
+  - name: "bridge"
+    type: "string"
+    filter: true
+  - name: "interface"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/interface gre"
+  list: true
+  detail: true
+  params:
+  - name: "remote-address"
+    type: "string"
+    filter: true
+  - name: "name"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "mtu"
+    type: "string"
+    optional: true
+    default: "auto"
+  - name: "keepalive"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "clamp-tcp-mss"
+    type: "bool"
+    optional: true
+    default: "true"
+  - name: "allow-fast-path"
+    type: "bool"
+    optional: true
+    default: "true"
+- path: "/interface list"
+  detail: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/interface list member"
+  detail: true
+  params:
+  - name: "interface"
+    type: "string"
+    filter: true
+  - name: "list"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/interface wireless"
+  list: true
+  detail: true
+  setonly: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/interface wireless monitor"
+  detail: true
+  list: true
+  listonly: true
+  showonly: true
+- path: "/ip arp"
+  detail: true
+  list: true
+  listonly: true
+  showonly: true
+- path: "/ip address"
+  detail: true
+  list: true
+  setonly: true
+  params:
+  - name: "address"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/ip cloud"
+  version: [6, 27]
+  routerboard: true
+  params:
+  - name: "ddns-enabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "update-time"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/ip dns"
+  params:
+  - name: "servers"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "allow-remote-requests"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/ip dns static"
+  detail: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "address"
+    type: "string"
+    extra: true
+  - name: "ttl"
+    type: "string"
+    optional: true
+    default: "1d"
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/ip firewall address-list"
+  detail: true
+  params:
+  - name: "address"
+    type: "string"
+    filter: true
+  - name: "list"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/ip firewall nat"
+  detail: true
+  mapped: "filter"
+  params:
+  - name: "filter"
+    type: "map[string]string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/ip neighbor"
+  detail: true
+  list: true
+  listonly: true
+  showonly: true
+- path: "/ip service"
+  detail: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "port"
+    type: "int"
+    optional: true
+    default: "0"
+  - name: "address"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/ip route"
+  detail: true
+  list: true
+  setonly: true
+  readflags:
+    "static": true
+  params:
+  - name: "dst-address"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/ip socks"
+  params:
+  - name: "enabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "port"
+    type: "int"
+    optional: true
+    default: "1080"
+  - name: "connection-idle-timeout"
+    type: "string"
+    optional: true
+    default: "2m"
+  - name: "max-connections"
+    type: "int"
+    optional: true
+    default: "200"
+- path: "/ip smb"
+  params:
+  - name: "enabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "domain"
+    type: "string"
+    optional: true
+    default: "MSHOME"
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: "MikrotikSMB"
+  - name: "allow-guests"
+    type: "bool"
+    optional: true
+    default: "true"
+  - name: "interface"
+    type: "string"
+    optional: true
+    default: "all"
+- path: "/ip smb shares"
+  default: true
+  detail: true
+  list: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "directory"
+    type: "string"
+    optional: true
+    default: "/pub"
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: "default share"
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "true"
+  - name: "max-sessions"
+    type: "int"
+    optional: true
+    default: "10"
+- path: "/ip smb users"
+  default: true
+  detail: true
+  list: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "password"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "read-only"
+    type: "bool"
+    optional: true
+    default: "true"
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/ip ssh"
+  params:
+  - name: "strong-crypto"
+    type: "bool"
+    optional: true
+    default: "true"
+    version: [6, 36]
+  - name: "forwarding-enabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "always-allow-password-login"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "host-key-size"
+    type: "int"
+    optional: true
+    default: "2048"
+    version: [6, 36]
+- path: "/ip traffic-flow"
+  detail: true
+  params:
+  - name: "enabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "interfaces"
+    type: "string"
+    optional: true
+    default: "all"
+  - name: "cache-entries"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "active-flow-timeout"
+    type: "string"
+    optional: true
+    default: "60s"
+  - name: "inactive-flow-timeout"
+    type: "string"
+    optional: true
+    default: "60s"
+- path: "/ip traffic-flow target"
+  version: [6, 31]
+  detail: true
+  params:
+  - name: "dst-address"
+    type: "string"
+    filter: true
+  - name: "port"
+    type: "int"
+    filter: true
+  - name: "src-address"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "version"
+    type: "int"
+    optional: true
+    default: "9"
+  - name: "v9-template-refresh"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "v9-template-timeout"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/queue simple"
+  list: true
+  detail: true
+  ordered: "queue"
+  version: [6, 0]
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "target"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "time"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "dst-address"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "packet-marks"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "parent"
+    type: "string"
+    optional: true
+    default: "none"
+  - name: "priority"
+    type: "int"
+    optional: true
+    default: "1"
+  - name: "queue"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "limit-at"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "max-limit"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "burst-limit"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "burst-time"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "burst-threshold"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "total-queue"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "total-limit-at"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "total-max-limit"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "total-burst-limit"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "total-burst-time"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "total-burst-threshold"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "bucket-size"
+    version: [6, 35]
+    type: "string"
+    optional: true
+    default: "0.1"
+- path: "/queue tree"
+  list: true
+  detail: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "packet-marks"
+    type: "string"
+    extra: true
+    default: ""
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "parent"
+    type: "string"
+    optional: true
+    default: "none"
+  - name: "priority"
+    type: "int"
+    optional: true
+    default: "1"
+  - name: "queue"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "limit-at"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "max-limit"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "burst-limit"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "burst-time"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "burst-threshold"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "bucket-size"
+    version: [6, 35]
+    type: "string"
+    optional: true
+    default: "0.1"
+- path: "/radius"
+  detail: true
+  params:
+  - name: "service"
+    type: "string"
+    filter: true
+  - name: "secret"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "address"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "src-address"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "timeout"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default:  "false"
+- path: "/radius incoming"
+  params:
+  - name: "accept"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "port"
+    type: "int"
+    optional: true
+    default: "0"
+- path: "/routing bgp network"
+  list: true
+  detail: true
+  setonly: true
+  params:
+  - name: "address"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/routing bgp aggregate"
+  list: true
+  detail: true
+  setonly: true
+  params:
+  - name: "instance"
+    type: "string"
+    filter: true
+  - name: "prefix"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/routing bgp instance"
+  list: true
+  detail: true
+  setonly: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "router-id"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/routing bgp peer"
+  list: true
+  detail: true
+  params:
+  - name: "remote-address"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "name"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/routing filter"
+  list: true
+  detail: true
+  ordered: "rule"
+  params:
+  - name: "comment"
+    type: "string"
+    filter: true
+  - name: "action"
+    type: "string"
+    filter: true
+  - name: "chain"
+    type: "string"
+    filter: true
+  - name: "prefix"
+    type: "string"
+    optional: true
+    notempty: true
+  - name: "prefix-length"
+    type: "string"
+    optional: true
+    notempty: true
+  - name: "protocol"
+    type: "string"
+    optional: true
+    notempty: true
+  - name: "invert-match"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "set-bgp-prepend-path"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/routing ospf instance"
+  list: true
+  setonly: true
+  detail: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "router-id"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "redistribute-connected"
+    type: "string"
+    readonly: true
+  - name: "redistribute-static"
+    type: "string"
+    readonly: true
+  - name: "disabled"
+    type: "bool"
+    readonly: true
+- path: "/routing ospf interface"
+  detail: true
+  setfilter:
+    "dynamic": "no"
+  list: true
+  setonly: true
+  params:
+  - name: "interface"
+    type: "string"
+    filter: true
+  - name: "cost"
+    type: "int"
+    optional: true
+    default: "100"
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "network-type"
+    type: "string"
+    readonly: true
+  - name: "hello-interval"
+    type: "string"
+    readonly: true
+  - name: "dead-interval"
+    type: "string"
+    readonly: true
+  - name: "authentication"
+    type: "string"
+    readonly: true
+  - name: "authentication-key"
+    type: "string"
+    readonly: true
+  - name: "disabled"
+    type: "bool"
+    readonly: true
+- path: "/routing ospf network"
+  detail: true
+  setonly: true
+  list: true
+  params:
+  - name: "network"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/routing ospf nbma-neighbor"
+  list: true
+  detail: true
+  params:
+  - name: "address"
+    type: "string"
+    filter: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "priority"
+    type: "int"
+    optional: true
+    default: "1"
+  - name: "poll-interval"
+    type: "string"
+    optional: true
+    default: "5s"
+- path: "/snmp"
+  params:
+  - name: "enabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "location"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "contact"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "engine-id"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "trap-community"
+    type: "string"
+    optional: true
+    default: "public"
+  - name: "trap-generators"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "trap-target"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "trap-version"
+    type: "int"
+    optional: true
+    default: "1"
+- path: "/snmp community"
+  default: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+    default: "public"
+  - name: "authentication-password"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "authentication-protocol"
+    type: "string"
+    optional: true
+    default: "MD5"
+  - name: "encryption-password"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "encryption-protocol"
+    type: "string"
+    optional: true
+    default: "DES"
+  - name: "addresses"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "security"
+    type: "string"
+    optional: true
+    default: "none"
+  - name: "read-access"
+    type: "bool"
+    optional: true
+    default: "true"
+  - name: "write-access"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/system clock"
+  params:
+  - name: "time-zone-name"
+    type: "string"
+    optional: true
+    default: "Pacific/Auckland"
+  - name: "time-zone-autodetect"
+    type: "bool"
+    optional: true
+    default: "false"
+    version: [6, 27]
+- path: "/system identity"
+  params:
+  - name: "name"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/system logging"
+  detail: true
+  params:
+  - name: "action"
+    type: "string"
+    filter: true
+  - name: "topics"
+    type: "string"
+    filter: true
+  - name: "prefix"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/system logging action"
+  detail: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "target"
+    type: "string"
+    optional: true
+    default: "remote"
+  - name: "remote"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "remote-port"
+    type: "int"
+    optional: true
+    default: "0"
+  - name: "src-address"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "bsd-syslog"
+    type: "bool"
+    optional: true
+    default: "true"
+  - name: "syslog-severity"
+    type: "string"
+    optional: true
+    default: "auto"
+  - name: "syslog-facility"
+    type: "string"
+    optional: true
+    default: "daemon"
+- path: "/system note"
+  params:
+  - name: "note"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "show-at-login"
+    type: "bool"
+    optional: true
+    default: "false"
+- path: "/system ntp client"
+  params:
+  - name: "enabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "primary-ntp"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "secondary-ntp"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/system resource"
+  readonly: true
+  params:
+  - name: "version"
+    type: "string"
+    optional: true
+  - name: "cpu"
+    type: "string"
+    optional: true
+  - name: "architecture-name"
+    type: "string"
+    optional: true
+  - name: "board-name"
+    type: "string"
+    optional: true
+  - name: "platform"
+    type: "string"
+    optional: true
+- path: "/user"
+  detail: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "group"
+    type: "string"
+    extra: true
+    default: ""
+  - name: "password"
+    type: "string"
+    extra: true
+    default: ""
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "address"
+    type: "string"
+    optional: true
+    default: ""
+- path: "/system routerboard"
+  readonly: true
+- path: "/system scheduler"
+  detail: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "interval"
+    type: "string"
+    extra: true
+  - name: "policy"
+    type: "string"
+    extra: true
+  - name: "on-event"
+    type: "string"
+    optional: true
+    extra: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "start-date"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "start-time"
+    type: "string"
+    optional: true
+    default: "startup"
+- path: "/system script"
+  version: [6, 41]
+  detail: true
+  raw: true
+  params:
+  - name: "name"
+    type: "string"
+    filter: true
+  - name: "owner"
+    type: "string"
+    extra: true
+  - name: "policy"
+    type: "string"
+    extra: true
+  - name: "source"
+    type: "string"
+    extra: true
+    script: true
+- path: "/tool bandwidth-server"
+  params:
+  - name: "enabled"
+    type:     "bool"
+    optional: true
+    default:  "true"
+  - name: "authenticate"
+    type:     "bool"
+    optional: true
+    default:  "true"
+  - name: "allocate-udp-ports-from"
+    type:     "int"
+    optional: true
+    default:  "2000"
+  - name: "max-sessions"
+    type:     "int"
+    optional: true
+    default:  "100"
+- path: "/tool mac-server"
+  params:
+  - name: "allowed-interface-list"
+    type: "string"
+    optional: true
+    default:  ""
+    version: [6, 41]
+- path: "/tool mac-server mac-winbox"
+  params:
+  - name: "allowed-interface-list"
+    type: "string"
+    optional: true
+    default:  "all"
+    version: [6, 41]
+- path: "/tool mac-server ping"
+  params:
+  - name: "enabled"
+    type: "bool"
+    optional: true
+    default:  "true"
+- path: "/tool netwatch"
+  detail: true
+  params:
+  - name: "host"
+    type: "string"
+    filter: true
+  - name: "up-script"
+    type: "string"
+    extra: true
+  - name: "down-script"
+    type: "string"
+    extra: true
+  - name: "interval"
+    type: "string"
+    extra: true
+  - name: "timeout"
+    type: "string"
+    extra: true
+  - name: "comment"
+    type: "string"
+    optional: true
+    default: ""
+  - name: "disabled"
+    type: "bool"
+    optional: true
+    default:  "false"
+- path: "/tool romon"
+  version: [6, 29]
+  params:
+  - name: "enabled"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "id"
+    alias: "mac-id"
+    type:  "string"
+    optional: true
+    default:  "00:00:00:00:00:00"
+  - name: "secrets"
+    type:  "string"
+    optional: true
+    default:  ""
+- path: "/tool romon port"
+  version: [6, 29]
+  detail: true
+  default: true
+  params:
+  - name: "interface"
+    type: "string"
+    filter: true
+  - name: "secrets"
+    type:  "string"
+    optional: true
+    default:  ""
+  - name: "cost"
+    type:  "int"
+    optional: true
+    default:  "0"
+  - name: "disabled"
+    type:  "bool"
+    optional: true
+    default:  "false"
+  - name: "forbid"
+    type:  "bool"
+    optional: true
+    default:  "false"
+- path: "/user aaa"
+  params:
+  - name: "allowed-interface-list"
+    type:     "string"
+    optional: true
+    default:  "all"
+  params:
+  - name: "use-radius"
+    type: "bool"
+    optional: true
+    default: "false"
+  - name: "accounting"
+    type: "bool"
+    optional: true
+    default: "true"
+  - name: "interim-update"
+    type: "string"
+    optional: true
+    default: "0s"
+  - name: "default-group"
+    type: "string"
+    optional: true
+    default: "read"
+  - name: "exclude-groups"
+    type: "string"
+    optional: true
+    default: ""
+
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2

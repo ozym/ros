@@ -49,7 +49,7 @@ func TestCommand_Remove(t *testing.T) {
 					"group": "read",
 				},
 			},
-			`/user remove [find group="read" name="name"]`,
+			`/user remove [find where group="read" name="name"]`,
 		},
 		{
 			Command{

@@ -1,5 +1,7 @@
 package ros
 
+//go:generate bash -c "go run generate/*.go -config menus.yaml | gofmt -s > auto.go; test -s auto.go || rm auto.go"
+
 import (
 	"net"
 	"strconv"
@@ -90,7 +92,7 @@ func NewRos(hostname string, options ...func(*Ros) error) (*Ros, error) {
 			Auth: []ssh.AuthMethod{
 				ssh.Password(DefaultPassword),
 			},
-			//TODO: remove after firware update
+			//TODO: remove after firmware update
 			Config: ssh.Config{
 				Ciphers: ssh.AllSupportedCiphers(),
 			},
@@ -156,7 +158,7 @@ func (r *Ros) Version() error {
 	}
 
 	r.once.Do(func() {
-		res, err := r.SystemResource()
+		res, _, err := r.SystemResource()
 		if err != nil {
 			r.err = err
 			return
@@ -166,7 +168,13 @@ func (r *Ros) Version() error {
 
 			r.major, r.minor = major, minor
 		}
-		if b, ok := res["routerboard"]; ok {
+
+		rou, _, err := r.SystemRouterboard()
+		if err != nil {
+			r.err = err
+			return
+		}
+		if b, ok := rou["routerboard"]; ok {
 			r.routerboard = ParseBool(b)
 		}
 	})
@@ -202,6 +210,20 @@ func (r *Ros) AtLeast(major, minor int) bool {
 		return true
 	}
 }
+
+func (r *Ros) AtMost(major, minor int) bool {
+	switch {
+	case r.Major() > major:
+		return false
+	case r.Major() < major:
+		return true
+	case r.Minor() > minor:
+		return false
+	default:
+		return true
+	}
+}
+
 func (r *Ros) Routerboard() bool {
 	return r.routerboard
 }
@@ -218,6 +240,17 @@ func ParseBool(x string) bool {
 		return true
 	}
 	return false
+}
+
+func ParseInt(x string) int {
+	if i, err := strconv.Atoi(x); err == nil {
+		return i
+	}
+	return 0
+}
+
+func FormatInt(i int) string {
+	return strconv.Itoa(i)
 }
 
 func (r *Ros) Parse(c Command) (string, error) {
@@ -311,6 +344,28 @@ func (r *Ros) List(c Command) ([]map[string]string, error) {
 	return res, nil
 }
 
+func (r *Ros) Raw(c Command) ([]map[string]string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if r.err != nil {
+		return nil, r.err
+	}
+
+	if err := r.Connect(); err != nil {
+		return nil, err
+	}
+
+	res, err := c.Raw(r.client)
+	if err != nil {
+		r.err = err
+
+		return res, err
+	}
+
+	return res, nil
+}
+
 func (r *Ros) UnnumberedList(c Command, header int) ([]map[string]string, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -350,6 +405,28 @@ func (r *Ros) First(c Command) (map[string]string, error) {
 		r.err = err
 
 		return res, err
+	}
+
+	return res, nil
+}
+
+func (r *Ros) Info(c Command, halt string) (map[string]string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if r.err != nil {
+		return nil, r.err
+	}
+
+	if err := r.Connect(); err != nil {
+		return nil, err
+	}
+
+	res, err := c.Info(r.client, halt)
+	if err != nil {
+		r.err = err
+
+		return nil, err
 	}
 
 	return res, nil
